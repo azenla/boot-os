@@ -1,0 +1,6 @@
+name: boot_os_tools
+version: 0.0.1
+environment:
+  sdk: '>=2.14.0'
+dependencies: 
+  crypto: ^3.0.1
