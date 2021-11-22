@@ -19,16 +19,6 @@
             "checksums": {
               "type": "object",
               "properties": {
-                "md5": {
-                  "type": "string",
-                  "minLength": 32,
-                  "maxLength": 32
-                },
-                "sha1": {
-                  "type": "string",
-                  "minLength": 40,
-                  "maxLength": 40
-                },
                 "sha256": {
                   "type": "string",
                   "minLength": 64,
@@ -41,10 +31,7 @@
                 }
               },
               "required": [
-                "md5",
-                "sha1",
-                "sha256",
-                "sha512"
+                "sha256"
               ]
             }
           },

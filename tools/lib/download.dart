@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:io';
 
 extension DownloadHttpClient on HttpClient {
-  Future<void> downloadToFile(Uri url, String path) async {
+  Future<File> downloadToFile(Uri url, String path) async {
     final file = File(path);
 
     if (!(await file.parent.exists())) {
@@ -20,5 +20,7 @@ extension DownloadHttpClient on HttpClient {
 
     final output = await file.openWrite();
     await response.pipe(output);
+    await output.close();
+    return file;
   }
 }

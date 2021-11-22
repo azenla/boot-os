@@ -3,6 +3,8 @@ library boot.os.tools.sources;
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart' as crypto;
+
 class Sources {
   final Map<String, SourceFile> files;
 
@@ -33,17 +35,33 @@ class SourceFile {
   }
 }
 
+class ChecksumWithHash {
+  final String checksum;
+  final crypto.Hash hash;
+
+  ChecksumWithHash(this.checksum, this.hash);
+}
+
 class SourceFileChecksums {
-  final String? md5;
-  final String? sha1;
   final String? sha256;
   final String? sha512;
 
-  SourceFileChecksums(this.md5, this.sha1, this.sha256, this.sha512);
+  SourceFileChecksums(this.sha256, this.sha512);
 
   factory SourceFileChecksums.decode(Map<String, dynamic> content) {
-    return SourceFileChecksums(
-        content["md5"], content["sha1"], content["sha256"], content["sha512"]);
+    return SourceFileChecksums(content["sha256"], content["sha512"]);
+  }
+
+  ChecksumWithHash createPreferredHash() {
+    if (sha512 != null) {
+      return ChecksumWithHash(sha512!, crypto.sha512);
+    }
+
+    if (sha256 != null) {
+      return ChecksumWithHash(sha256!, crypto.sha256);
+    }
+
+    throw Exception("Recognized hash not found.");
   }
 }
 
@@ -52,5 +70,17 @@ extension JsonFileSources on Sources {
     final file = File(path);
     final content = json.decode(await file.readAsString());
     return Sources.decode(content);
+  }
+}
+
+extension FileChecksumValidate on SourceFileChecksums {
+  Future<void> validatePreferredHash(File file) async {
+    final checksumAndHash = createPreferredHash();
+    final stream = file.openRead();
+    final digest = await checksumAndHash.hash.bind(stream).single;
+    if (digest.toString() != checksumAndHash.checksum) {
+      throw Exception(
+          "${file.path} has checksum ${digest.toString()} but ${checksumAndHash.checksum} was expected");
+    }
   }
 }

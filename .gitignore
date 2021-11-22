@@ -2,4 +2,5 @@
 .vscode/
 .dart_tool/
 .packages
-*/sources/*
+**/sources/*
+pubspec.lock

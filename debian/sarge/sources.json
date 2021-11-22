@@ -6,10 +6,7 @@
         "https://cdimage.debian.org/mirror/cdimage/archive/3.1_r8/i386/iso-cd/debian-31r8-i386-netinst.iso"
       ],
       "checksums": {
-        "md5": "ab486a76a9362a21054575624fead93f",
-        "sha1": "1ae919b97c0d5e55f45c7910f4aaa7b775df75da",
-        "sha256": "5cee250e89b2993cf9053c74602868f45b6d1b1386d41803dba42c6622a4558e",
-        "sha512": "27fd844d31cce01a9b06401d1672fcdbdefda9f550554728d6fb28216b3317ecd3eca29f5ae79c1f464e631e644816e6f2a667b4935865513d6b532e7852db7c"
+        "sha256": "5cee250e89b2993cf9053c74602868f45b6d1b1386d41803dba42c6622a4558e"
       }
     }
   }
