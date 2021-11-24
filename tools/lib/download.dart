@@ -54,6 +54,7 @@ class SourceDownload {
     final outputFilePath = "$outputDirectoryPath/$fileName";
     final file = File(outputFilePath);
     if (await file.exists()) {
+      print("[validate] ${outputFilePath}");
       if (await checksums.validatePreferredHash(file,
           shouldThrowError: false)) {
         print("[cached] ${outputFilePath}");
@@ -65,6 +66,7 @@ class SourceDownload {
     print("[download] ${outputFilePath}");
     final downloadedFile =
         await http.downloadToFile(url, "$outputDirectoryPath/$fileName");
+    print("[validate] ${outputFilePath}");
     await checksums.validatePreferredHash(downloadedFile);
   }
 }
