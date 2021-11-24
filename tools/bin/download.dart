@@ -4,40 +4,23 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:boot_os_tools/os.dart';
 import 'package:boot_os_tools/pool.dart';
-import 'package:boot_os_tools/sources.dart';
 import 'package:boot_os_tools/download.dart';
-
-class DownloadTask {
-  final HttpClient http;
-  final SourceFile sourceFile;
-  final String targetFilePath;
-
-  DownloadTask(this.http, this.sourceFile, this.targetFilePath);
-
-  Future<void> downloadAndVerify() async {
-    final url = Uri.parse(sourceFile.urls.first);
-    print("[download] $targetFilePath");
-    final targetFile = await http.downloadToFile(url, targetFilePath);
-    print("[checksum] $targetFilePath");
-    await sourceFile.checksums.validatePreferredHash(targetFile);
-  }
-}
 
 Future<void> downloadAllSources(
     HttpClient http, int downloadPoolSize, List<OperatingSystem> osList) async {
-  final tasks = <DownloadTask>[];
+  final tasks = <SourceDownload>[];
   for (final os in osList) {
     for (final name in os.metadata.sources.files.keys) {
       final sourceFile = os.metadata.sources.files[name];
-      final targetFilePath = "${os.sourcesDirectory.path}/${name}";
       if (sourceFile == null) {
         continue;
       }
-      tasks.add(DownloadTask(http, sourceFile, targetFilePath));
+      tasks.add(
+          SourceDownload(http, os.sourcesDirectory.path, name, sourceFile));
     }
   }
   await runTasksWithMaxConcurrency(
-      downloadPoolSize, tasks.map((e) => e.downloadAndVerify).toList());
+      downloadPoolSize, tasks.map((e) => e.download).toList());
 }
 
 Future<void> main(List<String> argv) async {

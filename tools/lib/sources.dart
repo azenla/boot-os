@@ -24,7 +24,7 @@ class SourceFile {
   final String architecture;
   final String format;
   final String version;
-  final List<String> urls;
+  final List<String>? urls;
   final SourceFileAssemble? assemble;
   final SourceFileChecksums checksums;
 
@@ -37,9 +37,11 @@ class SourceFile {
         content["architecture"],
         content["format"],
         content["version"],
-        (content["urls"] as List<dynamic>).cast<String>(),
-        content.containsKey("assemble") ? SourceFileAssemble.decode(
-            content["assemble"] as Map<dynamic, dynamic>) : null,
+        (content["urls"] as List<dynamic>?)?.cast<String>(),
+        content.containsKey("assemble")
+            ? SourceFileAssemble.decode(
+                content["assemble"] as Map<dynamic, dynamic>)
+            : null,
         SourceFileChecksums.decode(
             content["checksums"] as Map<dynamic, dynamic>));
   }
@@ -77,26 +79,33 @@ class SourceFileChecksums {
 
 class SourceFileAssemble {
   final String type;
+  final List<String> urls;
   final SourceFileChecksums checksums;
 
-  SourceFileAssemble(this.type, this.checksums);
+  SourceFileAssemble(this.type, this.urls, this.checksums);
 
   factory SourceFileAssemble.decode(Map<dynamic, dynamic> content) {
     return SourceFileAssemble(
-      content["type"],
-      SourceFileChecksums.decode(content["checksums"] as Map<dynamic, dynamic>)
-    );
+        content["type"],
+        (content["urls"] as List<dynamic>).cast<String>(),
+        SourceFileChecksums.decode(
+            content["checksums"] as Map<dynamic, dynamic>));
   }
 }
 
 extension FileChecksumValidate on SourceFileChecksums {
-  Future<void> validatePreferredHash(File file) async {
+  Future<bool> validatePreferredHash(File file,
+      {bool shouldThrowError = true}) async {
     final checksumAndHash = createPreferredHash();
     final stream = file.openRead();
     final digest = await checksumAndHash.hash.bind(stream).single;
     if (digest.toString() != checksumAndHash.checksum) {
-      throw Exception(
-          "${file.path} has checksum ${digest.toString()} but ${checksumAndHash.checksum} was expected");
+      if (shouldThrowError) {
+        throw Exception(
+            "${file.path} has checksum ${digest.toString()} but ${checksumAndHash.checksum} was expected");
+      }
+      return false;
     }
+    return true;
   }
 }

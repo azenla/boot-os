@@ -13,8 +13,8 @@ sources:
       type: jigdo
       checksums:
         sha256: ef6431f20da81cc91aa8ba3f5dc72c13ea7516483ddc6c6af9b692df75a2bcc5
-    urls:
-      - https://mirrors.kernel.org/debian-cd/11.1.0/amd64/jigdo-cd/debian-11.1.0-amd64-netinst.jigdo
+      urls:
+        - https://mirrors.kernel.org/debian-cd/11.1.0/amd64/jigdo-cd/debian-11.1.0-amd64-netinst.jigdo
     checksums:
       sha256: 8488abc1361590ee7a3c9b00ec059b29dfb1da40f8ba4adf293c7a30fa943eb2
   debian-arm64-installer.iso:
@@ -26,8 +26,8 @@ sources:
       type: jigdo
       checksums:
         sha256: dd5cf7af1d6f4ba151ba81ddfc21a9b97de978dfea2effd1aefb238f9694babb
-    urls:
-      - https://mirrors.kernel.org/debian-cd/11.1.0/arm64/jigdo-cd/debian-11.1.0-arm64-netinst.jigdo
+      urls:
+        - https://mirrors.kernel.org/debian-cd/11.1.0/arm64/jigdo-cd/debian-11.1.0-arm64-netinst.jigdo
     checksums:
       sha256: 5572d9d08fd05c857beaf13129481e088e8233bc39c869cb9f3b4ef0132602a3
 boot:
