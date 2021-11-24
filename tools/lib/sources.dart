@@ -1,6 +1,5 @@
 library boot.os.tools.sources;
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart' as crypto;
@@ -10,11 +9,10 @@ class Sources {
 
   Sources(this.files);
 
-  factory Sources.decode(Map<String, dynamic> content) {
+  factory Sources.decode(Map<dynamic, dynamic> content) {
     var files = Map<String, SourceFile>();
-    for (var key in content["files"].keys) {
-      var file =
-          SourceFile.decode(content["files"][key] as Map<String, dynamic>);
+    for (var key in content.keys) {
+      var file = SourceFile.decode(content[key] as Map<dynamic, dynamic>);
       files[key] = file;
     }
     return Sources(files);
@@ -22,16 +20,24 @@ class Sources {
 }
 
 class SourceFile {
+  final String media;
+  final String architecture;
+  final String format;
+  final String version;
   final List<String> urls;
   final SourceFileChecksums checksums;
 
-  SourceFile(this.urls, this.checksums);
+  SourceFile(this.media, this.architecture, this.format, this.version, this.urls, this.checksums);
 
-  factory SourceFile.decode(Map<String, dynamic> content) {
+  factory SourceFile.decode(Map<dynamic, dynamic> content) {
     return SourceFile(
+        content["media"],
+        content["architecture"],
+        content["format"],
+        content["version"],
         (content["urls"] as List<dynamic>).cast<String>(),
         SourceFileChecksums.decode(
-            content["checksums"] as Map<String, dynamic>));
+            content["checksums"] as Map<dynamic, dynamic>));
   }
 }
 
@@ -48,7 +54,7 @@ class SourceFileChecksums {
 
   SourceFileChecksums(this.sha256, this.sha512);
 
-  factory SourceFileChecksums.decode(Map<String, dynamic> content) {
+  factory SourceFileChecksums.decode(Map<dynamic, dynamic> content) {
     return SourceFileChecksums(content["sha256"], content["sha512"]);
   }
 
@@ -62,14 +68,6 @@ class SourceFileChecksums {
     }
 
     throw Exception("Recognized hash not found.");
-  }
-}
-
-extension JsonFileSources on Sources {
-  static Future<Sources> loadFromFile(String path) async {
-    final file = File(path);
-    final content = json.decode(await file.readAsString());
-    return Sources.decode(content);
   }
 }
 

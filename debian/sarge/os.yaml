@@ -1,0 +1,16 @@
+os: debian
+version: sarge
+architectures:
+- i386
+sources:
+  debian-i386-installer.iso:
+    media: installer
+    format: iso
+    arch: i386
+    version: 3.1-r8
+    urls:
+    - https://cdimage.debian.org/mirror/cdimage/archive/3.1_r8/i386/iso-cd/debian-31r8-i386-netinst.iso
+    checksums:
+      sha256: 5cee250e89b2993cf9053c74602868f45b6d1b1386d41803dba42c6622a4558e
+boot:
+  installer: debian

@@ -1,0 +1,16 @@
+os: debian
+version: lenny
+architectures:
+- i386
+sources:
+  debian-amd64-installer.iso:
+    media: installer
+    format: iso
+    architecture: amd64
+    version: 5.0.10
+    urls:
+    - https://cdimage.debian.org/mirror/cdimage/archive/5.0.10/amd64/iso-cd/debian-5010-amd64-netinst.iso
+    checksums:
+      sha256: 4406a75c885b0dc395d1c01291cd873be4ec784f0a20717508553486fae4d53f
+boot:
+  installer: debian

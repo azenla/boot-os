@@ -1,0 +1,26 @@
+os: debian
+version: bullseye
+architectures:
+- amd64
+- arm64
+sources:
+  debian-amd64-installer.iso:
+    media: installer
+    format: iso
+    architecture: amd64
+    version: 11.1.0
+    urls:
+      - https://mirrors.kernel.org/debian-cd/11.1.0/amd64/iso-cd/debian-11.1.0-amd64-netinst.iso
+    checksums:
+      sha256: 8488abc1361590ee7a3c9b00ec059b29dfb1da40f8ba4adf293c7a30fa943eb2
+  debian-arm64-installer.iso:
+    media: installer
+    format: iso
+    architecture: arm64
+    version: 11.1.0
+    urls:
+      - https://mirrors.kernel.org/debian-cd/11.1.0/arm64/iso-cd/debian-11.1.0-arm64-netinst.iso
+    checksums:
+      sha256: 5572d9d08fd05c857beaf13129481e088e8233bc39c869cb9f3b4ef0132602a3
+boot:
+  installer: debian
