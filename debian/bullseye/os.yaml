@@ -1,8 +1,8 @@
 os: debian
 version: bullseye
 architectures:
-- amd64
-- arm64
+  - amd64
+  - arm64
 sources:
   debian-amd64-installer.iso:
     media: installer

@@ -36,7 +36,8 @@ class OperatingSystemMetadata {
 
   final Sources sources;
 
-  OperatingSystemMetadata(this.os, this.version, this.architectures, this.sources);
+  OperatingSystemMetadata(
+      this.os, this.version, this.architectures, this.sources);
 
   factory OperatingSystemMetadata.decode(Map<dynamic, dynamic> content) {
     return OperatingSystemMetadata(

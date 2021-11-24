@@ -1,7 +1,7 @@
 os: debian
 version: squeeze
 architectures:
-- amd64
+  - amd64
 sources:
   debian-amd64-installer.iso:
     media: installer
@@ -9,7 +9,7 @@ sources:
     architecture: amd64
     version: 6.0.10
     urls:
-    - https://cdimage.debian.org/mirror/cdimage/archive/6.0.10/amd64/iso-cd/debian-6.0.10-amd64-netinst.iso
+      - https://cdimage.debian.org/mirror/cdimage/archive/6.0.10/amd64/iso-cd/debian-6.0.10-amd64-netinst.iso
     checksums:
       sha256: e7563ecea95e1352f0c36cc2fcac1a3bb13ce11715e5c4c9712ff4f05128f896
 boot:

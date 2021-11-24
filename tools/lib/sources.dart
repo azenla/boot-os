@@ -27,7 +27,8 @@ class SourceFile {
   final List<String> urls;
   final SourceFileChecksums checksums;
 
-  SourceFile(this.media, this.architecture, this.format, this.version, this.urls, this.checksums);
+  SourceFile(this.media, this.architecture, this.format, this.version,
+      this.urls, this.checksums);
 
   factory SourceFile.decode(Map<dynamic, dynamic> content) {
     return SourceFile(
