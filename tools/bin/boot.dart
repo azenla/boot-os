@@ -47,7 +47,7 @@ Future<void> main(List<String> argv) async {
       return false;
     }
     return true;
-  }, orElse: null);
+  }, orElse: () => null);
 
   if (source == null) {
     throw Exception(
