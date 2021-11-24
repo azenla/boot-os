@@ -109,7 +109,7 @@ class LslrEntity {
   }
 
   @override
-  String toString() => "LslrDirectory(${fullPath})";
+  String toString() => "LslrEntity(${fullPath})";
 
   void printFullStructure([String indent = ""]) {
     print("${indent}${name}");
@@ -144,5 +144,5 @@ class LslrFileEntry {
   }
 
   @override
-  String toString() => "LslrEntry(${name})";
+  String toString() => "LslrFileEntry(${name})";
 }

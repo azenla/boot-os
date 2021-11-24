@@ -25,10 +25,11 @@ class SourceFile {
   final String format;
   final String version;
   final List<String> urls;
+  final SourceFileAssemble? assemble;
   final SourceFileChecksums checksums;
 
   SourceFile(this.media, this.architecture, this.format, this.version,
-      this.urls, this.checksums);
+      this.urls, this.assemble, this.checksums);
 
   factory SourceFile.decode(Map<dynamic, dynamic> content) {
     return SourceFile(
@@ -37,6 +38,8 @@ class SourceFile {
         content["format"],
         content["version"],
         (content["urls"] as List<dynamic>).cast<String>(),
+        content.containsKey("assemble") ? SourceFileAssemble.decode(
+            content["assemble"] as Map<dynamic, dynamic>) : null,
         SourceFileChecksums.decode(
             content["checksums"] as Map<dynamic, dynamic>));
   }
@@ -69,6 +72,20 @@ class SourceFileChecksums {
     }
 
     throw Exception("Recognized hash not found.");
+  }
+}
+
+class SourceFileAssemble {
+  final String type;
+  final SourceFileChecksums checksums;
+
+  SourceFileAssemble(this.type, this.checksums);
+
+  factory SourceFileAssemble.decode(Map<dynamic, dynamic> content) {
+    return SourceFileAssemble(
+      content["type"],
+      SourceFileChecksums.decode(content["checksums"] as Map<dynamic, dynamic>)
+    );
   }
 }
 
