@@ -12,20 +12,23 @@ Future<void> main(List<String> argv) async {
   argp.addOption("architecture",
       abbr: "a", help: "Boot Architecture", mandatory: true);
   argp.addOption("media", abbr: "m", help: "Boot Media", mandatory: true);
-  ArgResults args;
-  try {
-    args = argp.parse(argv);
-  } catch (e) {
-    print(e);
+
+  Never printUsageAndExit() {
     print("Usage: tools/bin/boot.dart [options] <os>");
     print(argp.usage);
     exit(1);
   }
 
+  ArgResults args;
+  try {
+    args = argp.parse(argv);
+  } catch (e) {
+    print(e);
+    printUsageAndExit();
+  }
+
   if (args["help"]) {
-    print("Usage: tools/bin/boot.dart [options] <os>");
-    print(argp.usage);
-    exit(1);
+    printUsageAndExit();
   }
   final architecture = args["architecture"].toString();
   final media = args["media"].toString();

@@ -45,20 +45,23 @@ Future<void> main(List<String> argv) async {
   argp.addOption("max-parallel-downloads",
       abbr: "p", help: "Maximum Parallel Downloads", defaultsTo: "3");
   argp.addFlag("help", abbr: "h", help: "Show Command Usage", negatable: false);
-  ArgResults args;
-  try {
-    args = argp.parse(argv);
-  } catch (e) {
-    print(e);
+
+  Never printUsageAndExit() {
     print("Usage: tools/bin/download.dart [options] [os...]");
     print(argp.usage);
     exit(1);
   }
 
+  ArgResults args;
+  try {
+    args = argp.parse(argv);
+  } catch (e) {
+    print(e);
+    printUsageAndExit();
+  }
+
   if (args["help"]) {
-    print("Usage: tools/bin/download.dart [options] [os...]");
-    print(argp.usage);
-    exit(1);
+    printUsageAndExit();
   }
   final maxParallelDownloads = int.parse(args["max-parallel-downloads"]);
 
