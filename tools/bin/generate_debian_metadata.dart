@@ -40,6 +40,12 @@ Future<void> main(List<String> argv) async {
   final linesIndexStream = LineSplitter().bind(utf8IndexStream);
   final index = await LslrIndexUnstructured.parse(linesIndexStream);
   final structure = index.createFullStructure();
-  structure.printFullStructure();
+  final jigdoFiles = structure.find(
+      RegExp(r"^.*\/jigdo-cd\/debian\-[0-9].*\-netinst\.jigdo$"),
+      matchOnFullPath: true);
+  for (final jigdoFile in jigdoFiles) {
+    final jigdoFileName = jigdoFile.name;
+    print(jigdoFileName);
+  }
   http.close();
 }

@@ -117,6 +117,24 @@ class LslrEntity {
       child.printFullStructure(indent + "  ");
     }
   }
+
+  void visit(void Function(LslrEntity entity) callback) {
+    callback(this);
+    for (final child in children) {
+      child.visit(callback);
+    }
+  }
+
+  List<LslrEntity> find(Pattern pattern, {bool matchOnFullPath = false}) {
+    final entities = <LslrEntity>[];
+    visit((entity) {
+      final target = matchOnFullPath ? entity.fullPath : entity.name;
+      if (pattern.allMatches(target).isNotEmpty) {
+        entities.add(entity);
+      }
+    });
+    return entities;
+  }
 }
 
 class LslrFileEntry {
