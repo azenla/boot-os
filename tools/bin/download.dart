@@ -3,11 +3,10 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:boot_os_tools/os.dart';
-import 'package:boot_os_tools/pool.dart';
 import 'package:boot_os_tools/download.dart';
 
 Future<void> downloadAllSources(
-    HttpClient http, int downloadPoolSize, List<OperatingSystem> osList) async {
+    HttpClient http, List<OperatingSystem> osList) async {
   final tasks = <SourceDownload>[];
   for (final os in osList) {
     for (final name in os.metadata.sources.files.keys) {
@@ -19,8 +18,7 @@ Future<void> downloadAllSources(
           SourceDownload(http, os.sourcesDirectory.path, name, sourceFile));
     }
   }
-  await runTasksWithMaxConcurrency(
-      downloadPoolSize, tasks.map((e) => e.download).toList());
+  await Future.wait(tasks.map((e) => e.download()));
 }
 
 Future<void> main(List<String> argv) async {
@@ -47,11 +45,12 @@ Future<void> main(List<String> argv) async {
     printUsageAndExit();
   }
   final maxParallelDownloads = int.parse(args["max-parallel-downloads"]);
+  GlobalDownloadPool.setup(maxParallelDownloads);
 
   final http = HttpClient();
   http.maxConnectionsPerHost = maxParallelDownloads;
   final osList =
       await Future.wait(args.rest.map((path) => OperatingSystem.load(path)));
-  await downloadAllSources(http, maxParallelDownloads, osList);
+  await downloadAllSources(http, osList);
   http.close();
 }

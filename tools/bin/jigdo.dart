@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:boot_os_tools/download.dart';
 import 'package:boot_os_tools/jigdo.dart';
-import 'package:boot_os_tools/pool.dart';
 import 'package:boot_os_tools/sources.dart';
 import 'package:crypto/crypto.dart';
 
@@ -47,6 +47,7 @@ Future<void> main(List<String> argv) async {
   final maxParallelDownloads = int.parse(args["max-parallel-downloads"]);
   final http = HttpClient();
   http.maxConnectionsPerHost = maxParallelDownloads;
+  GlobalDownloadPool.setup(maxParallelDownloads);
 
   final jigdoFile = File(jigdoFilePath);
   final cacheDirectory = Directory(cacheDirectoryPath);
@@ -61,13 +62,9 @@ Future<void> main(List<String> argv) async {
   }
   final metadata = JigdoMetadataFile.parse(jigdoFileContent);
   final partsToUrls = metadata.generatePossibleUrls();
-  final files = await runTasksWithMaxConcurrency(
-      maxParallelDownloads,
-      partsToUrls.entries.map((e) {
-        return () async {
-          return await cache.download(e.value, ChecksumWithHash(e.key, md5));
-        };
-      }).toList());
+  final files = await Future.wait(partsToUrls.entries.map((e) async =>
+      await GlobalDownloadPool.use(
+          () => cache.download(e.value, ChecksumWithHash(e.key, md5)))));
   http.close();
   final imageFile = File(imageFilePath);
   if (await imageFile.exists()) {

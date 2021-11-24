@@ -6,8 +6,25 @@ import 'dart:io';
 
 import 'package:boot_os_tools/sources.dart';
 import 'package:crypto/crypto.dart';
+import 'package:pool/pool.dart';
 
 import 'jigdo.dart';
+
+class GlobalDownloadPool {
+  static Pool? _pool = null;
+
+  static Future<T> use<T>(FutureOr<T> Function() task) {
+    if (_pool != null) {
+      return _pool!.withResource(() => task());
+    } else {
+      return Future(() async => await task());
+    }
+  }
+
+  static void setup(int maxParallelDownloads) {
+    _pool = Pool(maxParallelDownloads);
+  }
+}
 
 extension DownloadHttpClient on HttpClient {
   Future<File> downloadToFile(Uri url, String path,
@@ -48,7 +65,7 @@ class SourceDownload {
 
   Future<void> download() async {
     if (metadata.assemble == null) {
-      await downloadDirectFile();
+      await GlobalDownloadPool.use(() async => await downloadDirectFile());
     } else {
       final assemble = metadata.assemble!;
       for (final entry in assemble.sources.files.entries) {
@@ -80,10 +97,16 @@ class SourceDownload {
         final cache =
             JigdoCache(http, Directory("${outputDirectoryPath}/jigdo"));
         final allFilePaths = <String>[];
-        for (final e in partsToUrls.entries) {
-          final file =
-              await cache.download(e.value, ChecksumWithHash(e.key, md5));
-          allFilePaths.add(file.absolute.path);
+
+        final tasks = partsToUrls.entries.map((entry) {
+          return GlobalDownloadPool.use(() {
+            return cache.download(
+                entry.value, ChecksumWithHash(entry.key, md5));
+          });
+        });
+        final results = await Future.wait(tasks);
+        for (final cachedFile in results) {
+          allFilePaths.add(cachedFile.absolute.path);
         }
 
         if (await file.exists()) {
