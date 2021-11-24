@@ -1,9 +1,11 @@
 library boot.os.tools.download;
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:boot_os_tools/sources.dart';
+import 'package:crypto/crypto.dart';
 
 import 'jigdo.dart';
 
@@ -57,18 +59,43 @@ class SourceDownload {
         await download.download();
       }
 
+      final outputFilePath = "$outputDirectoryPath/$outputFileName";
+      final file = File(outputFilePath);
+
       if (assemble.type == "jigdo") {
-        final jigdoFile =
+        final jigdoFileName =
             assemble.sources.files.keys.firstWhere((e) => e.endsWith(".jigdo"));
-        print("[jigdo] ${outputDirectoryPath}/$jigdoFile");
-        await runJigdoLiteIn(
-            outputDirectoryPath, ["--noask", "--scan", ".", jigdoFile]);
+        final templateFileName = assemble.sources.files.keys
+            .firstWhere((e) => e.endsWith(".template"));
+        final jigdoFile = File("$outputDirectoryPath/$jigdoFileName");
+        final jigdoFileBytes = await jigdoFile.readAsBytes();
+        String jigdoFileContent;
+        try {
+          jigdoFileContent = utf8.decode(gzip.decode(jigdoFileBytes));
+        } catch (e) {
+          jigdoFileContent = utf8.decode(jigdoFileBytes);
+        }
+        final jigdoMetadata = JigdoMetadataFile.parse(jigdoFileContent);
+        final partsToUrls = jigdoMetadata.generatePossibleUrls();
+        final cache =
+            JigdoCache(http, Directory("${outputDirectoryPath}/jigdo"));
+        final allFilePaths = <String>[];
+        for (final e in partsToUrls.entries) {
+          final file =
+              await cache.download(e.value, ChecksumWithHash(e.key, md5));
+          allFilePaths.add(file.absolute.path);
+        }
+
+        if (await file.exists()) {
+          await file.delete();
+        }
+        print("[jigdo] $outputFilePath");
+        await runJigdoMakeImage(outputDirectoryPath, outputFileName,
+            jigdoFileName, templateFileName, allFilePaths);
       } else {
         throw Exception("Unknown assemble type '${assemble.type}'");
       }
 
-      final outputFilePath = "$outputDirectoryPath/$outputFileName";
-      final file = File(outputFilePath);
       print("[validate] ${outputFilePath}");
       await metadata.checksums.validatePreferredHash(file);
     }
