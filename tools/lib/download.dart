@@ -5,6 +5,8 @@ import 'dart:io';
 
 import 'package:boot_os_tools/sources.dart';
 
+import 'jigdo.dart';
+
 extension DownloadHttpClient on HttpClient {
   Future<File> downloadToFile(Uri url, String path) async {
     final file = File(path);
@@ -40,7 +42,29 @@ class SourceDownload {
     if (metadata.assemble == null) {
       await downloadDirectFile();
     } else {
-      throw Exception("Assemble support has not yet been implemented.");
+      final assemble = metadata.assemble!;
+      for (final entry in assemble.sources.files.entries) {
+        final fileName = entry.key;
+        final file = entry.value;
+        final download =
+            SourceDownload(http, outputDirectoryPath, fileName, file);
+        await download.download();
+      }
+
+      if (assemble.type == "jigdo") {
+        final jigdoFile =
+            assemble.sources.files.keys.firstWhere((e) => e.endsWith(".jigdo"));
+        print("[jigdo] ${outputDirectoryPath}/$jigdoFile");
+        await runJigdoLiteIn(
+            outputDirectoryPath, ["--noask", "--scan", ".", jigdoFile]);
+      } else {
+        throw Exception("Unknown assemble type '${assemble.type}'");
+      }
+
+      final outputFilePath = "$outputDirectoryPath/$outputFileName";
+      final file = File(outputFilePath);
+      print("[validate] ${outputFilePath}");
+      await metadata.checksums.validatePreferredHash(file);
     }
   }
 

@@ -10,7 +10,7 @@ Future<void> main(List<String> argv) async {
   argp.addOption("mirror",
       abbr: "m",
       help: "Mirror URL",
-      defaultsTo: "https://cdimage.debian.org/debian-cd/ls-lR.gz");
+      defaultsTo: "https://cdimage.debian.org/debian-cd/");
   argp.addFlag("help", abbr: "h", help: "Show Command Usage", negatable: false);
 
   Never printUsageAndExit() {
@@ -32,7 +32,6 @@ Future<void> main(List<String> argv) async {
   }
   final mirrorUrl = Uri.parse(args["mirror"]);
   final mirrorIndexUrl = mirrorUrl.resolve("./ls-lR.gz");
-
   final http = HttpClient();
   final request = await http.getUrl(mirrorIndexUrl);
   final response = await request.close();

@@ -9,10 +9,16 @@ class Sources {
 
   Sources(this.files);
 
-  factory Sources.decode(Map<dynamic, dynamic> content) {
+  factory Sources.decode(Map<dynamic, dynamic> content,
+      {bool useAssembleMode = false}) {
     var files = Map<String, SourceFile>();
     for (var key in content.keys) {
-      var file = SourceFile.decode(content[key] as Map<dynamic, dynamic>);
+      SourceFile file;
+      if (useAssembleMode) {
+        file = SourceFile.decodeAssemble(content[key] as Map<dynamic, dynamic>);
+      } else {
+        file = SourceFile.decode(content[key] as Map<dynamic, dynamic>);
+      }
       files[key] = file;
     }
     return Sources(files);
@@ -37,6 +43,21 @@ class SourceFile {
         content["architecture"],
         content["format"],
         content["version"],
+        (content["urls"] as List<dynamic>?)?.cast<String>(),
+        content.containsKey("assemble")
+            ? SourceFileAssemble.decode(
+                content["assemble"] as Map<dynamic, dynamic>)
+            : null,
+        SourceFileChecksums.decode(
+            content["checksums"] as Map<dynamic, dynamic>));
+  }
+
+  factory SourceFile.decodeAssemble(Map<dynamic, dynamic> content) {
+    return SourceFile(
+        "assemble",
+        "assemble",
+        "assemble",
+        "assemble",
         (content["urls"] as List<dynamic>?)?.cast<String>(),
         content.containsKey("assemble")
             ? SourceFileAssemble.decode(
@@ -79,17 +100,15 @@ class SourceFileChecksums {
 
 class SourceFileAssemble {
   final String type;
-  final List<String> urls;
-  final SourceFileChecksums checksums;
+  final Sources sources;
 
-  SourceFileAssemble(this.type, this.urls, this.checksums);
+  SourceFileAssemble(this.type, this.sources);
 
   factory SourceFileAssemble.decode(Map<dynamic, dynamic> content) {
     return SourceFileAssemble(
         content["type"],
-        (content["urls"] as List<dynamic>).cast<String>(),
-        SourceFileChecksums.decode(
-            content["checksums"] as Map<dynamic, dynamic>));
+        Sources.decode(content["sources"] as Map<dynamic, dynamic>,
+            useAssembleMode: true));
   }
 }
 
