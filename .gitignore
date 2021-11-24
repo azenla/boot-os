@@ -4,3 +4,5 @@
 .packages
 **/sources/*
 pubspec.lock
+/jigdo
+.DS_Store

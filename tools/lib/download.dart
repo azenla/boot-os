@@ -8,22 +8,28 @@ import 'package:boot_os_tools/sources.dart';
 import 'jigdo.dart';
 
 extension DownloadHttpClient on HttpClient {
-  Future<File> downloadToFile(Uri url, String path) async {
+  Future<File> downloadToFile(Uri url, String path,
+      {bool failOnNotFound = true}) async {
     final file = File(path);
+    final request = await getUrl(url);
+    final response = await request.close();
+    if (response.statusCode != 200) {
+      await response.drain();
+      if (response.statusCode == 404 && !failOnNotFound) {
+        return file;
+      }
+      throw Exception(
+          "Download of ${url} failed. Status Code: ${response.statusCode}");
+    }
 
     if (!(await file.parent.exists())) {
       await file.parent.create();
     }
 
-    final request = await getUrl(url);
-    final response = await request.close();
-    if (response.statusCode != 200) {
-      throw Exception(
-          "Download of ${url} failed. Status Code: ${response.statusCode}");
-    }
-
     final output = await file.openWrite();
-    await response.pipe(output);
+    await response.listen((bytes) {
+      output.add(bytes);
+    }).asFuture();
     await output.close();
     return file;
   }

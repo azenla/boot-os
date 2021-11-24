@@ -7,6 +7,8 @@ typedef PoolTask<T> = Future<T> Function();
 Future<List<T>> runTasksWithMaxConcurrency<T>(
     int maxTaskConcurrency, List<PoolTask<T>> tasks) async {
   final pool = Pool(maxTaskConcurrency);
-  return await Future.wait(
-      tasks.map((task) => pool.withResource(() => task())));
+  final results =
+      await Future.wait(tasks.map((task) => pool.withResource(() => task())));
+  await pool.close();
+  return results;
 }

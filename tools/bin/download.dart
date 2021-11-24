@@ -49,6 +49,7 @@ Future<void> main(List<String> argv) async {
   final maxParallelDownloads = int.parse(args["max-parallel-downloads"]);
 
   final http = HttpClient();
+  http.maxConnectionsPerHost = maxParallelDownloads;
   final osList =
       await Future.wait(args.rest.map((path) => OperatingSystem.load(path)));
   await downloadAllSources(http, maxParallelDownloads, osList);

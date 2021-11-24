@@ -73,6 +73,19 @@ class ChecksumWithHash {
   final crypto.Hash hash;
 
   ChecksumWithHash(this.checksum, this.hash);
+
+  Future<bool> validate(File file, {bool shouldThrowError = true}) async {
+    final stream = file.openRead();
+    final digest = await hash.bind(stream).single;
+    if (digest.toString() != checksum) {
+      if (shouldThrowError) {
+        throw Exception(
+            "${file.path} has checksum ${digest.toString()} but ${checksum} was expected");
+      }
+      return false;
+    }
+    return true;
+  }
 }
 
 class SourceFileChecksums {
@@ -116,15 +129,7 @@ extension FileChecksumValidate on SourceFileChecksums {
   Future<bool> validatePreferredHash(File file,
       {bool shouldThrowError = true}) async {
     final checksumAndHash = createPreferredHash();
-    final stream = file.openRead();
-    final digest = await checksumAndHash.hash.bind(stream).single;
-    if (digest.toString() != checksumAndHash.checksum) {
-      if (shouldThrowError) {
-        throw Exception(
-            "${file.path} has checksum ${digest.toString()} but ${checksumAndHash.checksum} was expected");
-      }
-      return false;
-    }
-    return true;
+    return await checksumAndHash.validate(file,
+        shouldThrowError: shouldThrowError);
   }
 }
