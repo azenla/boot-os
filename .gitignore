@@ -3,6 +3,7 @@
 .dart_tool/
 .packages
 **/sources/*
+**/instances/*
 pubspec.lock
 /jigdo
 .DS_Store

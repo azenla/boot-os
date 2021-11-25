@@ -16,9 +16,17 @@ class OperatingSystem {
 
   Directory get sourcesDirectory => Directory("$path/sources");
 
+  Directory get instancesDirectory => Directory("$path/instances");
+
   Future<void> ensureSourcesDirectory() async {
     if (!(await sourcesDirectory.exists())) {
       await sourcesDirectory.create(recursive: true);
+    }
+  }
+
+  Future<void> ensureInstancesDirectory() async {
+    if (!(await instancesDirectory.exists())) {
+      await instancesDirectory.create(recursive: true);
     }
   }
 
