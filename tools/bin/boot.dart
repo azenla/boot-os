@@ -119,8 +119,6 @@ Future<void> main(List<String> argv) async {
       break;
   }
 
-  print(qemuSystemArgs);
-
   switch (sourceMetadata.format) {
     case "iso":
       qemuSystemArgs.addAll(["-cdrom", "sources/$sourceFileName"]);
