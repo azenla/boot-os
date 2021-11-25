@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:args/args.dart';
 import 'package:boot_os_tools/download.dart';
 import 'package:boot_os_tools/hashlist.dart';
+import 'package:boot_os_tools/jigdo.dart';
 import 'package:boot_os_tools/lslr.dart';
 import 'package:boot_os_tools/os.dart';
 import 'package:boot_os_tools/sources.dart';
@@ -116,24 +117,18 @@ Future<void> runCdimageTool(ArgResults args) async {
 
     final architecture = jigdoFile.parent!.parent!.name;
     final version = jigdoFile.name.split("-")[1];
-    final file = SourceFile(
+    files[isoFileName] = createJigdoSourceFile(
         "installer",
         architecture,
         "iso",
         version,
-        null,
-        SourceFileAssemble(
-            "jigdo",
-            Sources({
-              jigdoFileName: SourceFile.assemble([jigdoFile.url.toString()],
-                  null, SourceFileChecksums(jigdoFileChecksum, null)),
-              templateFileName: SourceFile.assemble(
-                  [templateFile.url.toString()],
-                  null,
-                  SourceFileChecksums(templateFileChecksum, null))
-            })),
+        jigdoFileName,
+        [jigdoFile.url.toString()],
+        SourceFileChecksums(jigdoFileChecksum, null),
+        templateFileChecksum,
+        [templateFile.url.toString()],
+        SourceFileChecksums(templateFileChecksum, null),
         SourceFileChecksums(isoFileChecksum, null));
-    files[isoFileName] = file;
   }
   final debianVersionName = args["debian-version"];
   final sources = Sources(files);

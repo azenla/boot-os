@@ -8,13 +8,33 @@ import 'download.dart';
 import 'ini.dart';
 import 'sources.dart';
 
-Future<void> runJigdoLiteIn(String path, List<String> args) async {
-  final process =
-      await Process.start("jigdo-lite", args, workingDirectory: path);
-  final exitCode = await process.exitCode;
-  if (exitCode != 0) {
-    throw Exception("jigdo-lite $args failed in $path: exit code = $exitCode");
-  }
+SourceFile createJigdoSourceFile(
+    String media,
+    String architecture,
+    String format,
+    String version,
+    String jigdoFileName,
+    List<String> jigdoFileUrls,
+    SourceFileChecksums jigdoFileChecksums,
+    String templateFileName,
+    List<String> templateFileUrls,
+    SourceFileChecksums templateFileChecksums,
+    SourceFileChecksums resultFileChecksums) {
+  return SourceFile(
+      media,
+      architecture,
+      format,
+      version,
+      null,
+      SourceFileAssemble(
+          "jigdo",
+          Sources({
+            jigdoFileName:
+                SourceFile.assemble(jigdoFileUrls, null, jigdoFileChecksums),
+            templateFileName: SourceFile.assemble(
+                templateFileUrls, null, templateFileChecksums)
+          })),
+      resultFileChecksums);
 }
 
 Future<void> runJigdoMakeImage(
