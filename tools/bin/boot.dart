@@ -12,10 +12,7 @@ Future<void> main(List<String> argv) async {
   argp.addFlag("help", abbr: "h", help: "Show Command Usage", negatable: false);
   argp.addOption("architecture",
       abbr: "a", help: "Boot Architecture", mandatory: true);
-  argp.addOption("qemu-firmware-path",
-      abbr: "q",
-      help: "QEMU Firmware Path",
-      defaultsTo: await findQemuFirmwarePath());
+  argp.addOption("qemu-firmware-path", abbr: "q", help: "QEMU Firmware Path");
   argp.addOption("media", abbr: "m", help: "Boot Media", mandatory: true);
 
   Never printUsageAndExit() {
@@ -84,28 +81,30 @@ Future<void> main(List<String> argv) async {
     return qemuImageFile.path;
   }
 
+  final additionalFirmwarePaths = <String>[];
   final qemuFirmwarePath = args["qemu-firmware-path"];
-  Future<String> ensureQemuFirmware(String file) async {
-    if (qemuFirmwarePath == null) {
-      throw Exception("qemu-firmware-path is required to find file ${file}");
-    }
+  if (qemuFirmwarePath != null) {
+    additionalFirmwarePaths.add(qemuFirmwarePath);
+  }
 
-    final qemuFirmwareFile = File("$qemuFirmwarePath/$file");
-    if (await qemuFirmwareFile.exists()) {
-      return qemuFirmwareFile.absolute.path;
-    } else {
+  Future<String> ensureQemuFirmware(List<String> possibleFileNames) async {
+    final path = await findQemuFirmwareFile(architecture, possibleFileNames,
+        additionalFirmwarePaths: additionalFirmwarePaths);
+    if (path == null) {
       throw Exception(
-          "Failed to find firmware file $file in $qemuFirmwarePath");
+          "Failed to find QEMU firmware under the names ${possibleFileNames}");
     }
+    return path;
   }
 
   switch (qemuSystemExecutable) {
     case "qemu-system-aarch64":
       final flashZeroImagePath =
-          await ensureQemuImage("aarch64-flash0.img", "raw", "64M");
+          await ensureQemuImage("${architecture}-flash0.img", "raw", "64M");
       final flashOneImagePath =
-          await ensureQemuImage("aarch64-flash1.img", "raw", "64M");
-      final edk2Aarch64Path = await ensureQemuFirmware("edk2-aarch64-code.fd");
+          await ensureQemuImage("${architecture}-flash1.img", "raw", "64M");
+      final edk2Aarch64Path =
+          await ensureQemuFirmware(["edk2-aarch64-code.fd", "QEMU_EFI.fd"]);
       await writeToImage(edk2Aarch64Path, flashZeroImagePath);
       qemuSystemArgs.addAll(<String>[
         "-machine",
