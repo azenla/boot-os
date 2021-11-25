@@ -3,46 +3,212 @@ version: bullseye
 architectures:
   - amd64
   - arm64
+  - armel
+  - armhf
+  - i386
+  - mips64el
+  - mipsel
+  - multi-arch
+  - ppc64el
+  - s390x
 sources:
   debian-11.1.0-amd64-netinst.iso:
     media: installer
-    format: iso
     architecture: amd64
+    format: iso
     version: 11.1.0
     assemble:
       type: jigdo
       sources:
         debian-11.1.0-amd64-netinst.jigdo:
           urls:
-            - https://mirrors.kernel.org/debian-cd/11.1.0/amd64/jigdo-cd/debian-11.1.0-amd64-netinst.jigdo
+            - https://cdimage.debian.org/debian-cd/11.1.0/amd64/jigdo-cd/debian-11.1.0-amd64-netinst.jigdo
           checksums:
             sha256: ef6431f20da81cc91aa8ba3f5dc72c13ea7516483ddc6c6af9b692df75a2bcc5
         debian-11.1.0-amd64-netinst.template:
           urls:
-            - https://mirrors.kernel.org/debian-cd/11.1.0/amd64/jigdo-cd/debian-11.1.0-amd64-netinst.template
+            - https://cdimage.debian.org/debian-cd/11.1.0/amd64/jigdo-cd/debian-11.1.0-amd64-netinst.template
           checksums:
             sha256: bd5e2920c40cdf26c5a69b3e66f58718347d7d975905c92a3c99de3fe5e27ac1
     checksums:
       sha256: 8488abc1361590ee7a3c9b00ec059b29dfb1da40f8ba4adf293c7a30fa943eb2
   debian-11.1.0-arm64-netinst.iso:
     media: installer
-    format: iso
     architecture: arm64
+    format: iso
     version: 11.1.0
     assemble:
       type: jigdo
       sources:
         debian-11.1.0-arm64-netinst.jigdo:
           urls:
-            - https://mirrors.kernel.org/debian-cd/11.1.0/arm64/jigdo-cd/debian-11.1.0-arm64-netinst.jigdo
+            - https://cdimage.debian.org/debian-cd/11.1.0/arm64/jigdo-cd/debian-11.1.0-arm64-netinst.jigdo
           checksums:
             sha256: dd5cf7af1d6f4ba151ba81ddfc21a9b97de978dfea2effd1aefb238f9694babb
         debian-11.1.0-arm64-netinst.template:
           urls:
-            - https://mirrors.kernel.org/debian-cd/11.1.0/arm64/jigdo-cd/debian-11.1.0-arm64-netinst.template
+            - https://cdimage.debian.org/debian-cd/11.1.0/arm64/jigdo-cd/debian-11.1.0-arm64-netinst.template
           checksums:
             sha256: 4f68b3ed3fccca13dbacb298a0b93f6cb11dc1dab45769634ecc6fbcdb92983d
     checksums:
       sha256: 5572d9d08fd05c857beaf13129481e088e8233bc39c869cb9f3b4ef0132602a3
-boot:
-  installer: debian
+  debian-11.1.0-armel-netinst.iso:
+    media: installer
+    architecture: armel
+    format: iso
+    version: 11.1.0
+    assemble:
+      type: jigdo
+      sources:
+        debian-11.1.0-armel-netinst.jigdo:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/armel/jigdo-cd/debian-11.1.0-armel-netinst.jigdo
+          checksums:
+            sha256: 7f3bdc1fa9fe7e23af6a796a64da7acf62eb8f88d932b2517ae9106874cb5407
+        debian-11.1.0-armel-netinst.template:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/armel/jigdo-cd/debian-11.1.0-armel-netinst.template
+          checksums:
+            sha256: d24ec66e198f8c9bf486b2d71d88446a1671dd63deb317eca79acff024b7bd61
+    checksums:
+      sha256: 5435870a1428f8a168a160d2822f857f00bb6b42cbb7c715d20f24b2c6ae4ece
+  debian-11.1.0-armhf-netinst.iso:
+    media: installer
+    architecture: armhf
+    format: iso
+    version: 11.1.0
+    assemble:
+      type: jigdo
+      sources:
+        debian-11.1.0-armhf-netinst.jigdo:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/armhf/jigdo-cd/debian-11.1.0-armhf-netinst.jigdo
+          checksums:
+            sha256: 025d2f53483228bacbc9be3505f25e8d0bcf51df20674e66c472060629894775
+        debian-11.1.0-armhf-netinst.template:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/armhf/jigdo-cd/debian-11.1.0-armhf-netinst.template
+          checksums:
+            sha256: c627d9dd2c2c9d801678198e7fb66693ac7534364371d7f016967e4f86823f66
+    checksums:
+      sha256: 03d29d7641858e0e7d10bf7a4f955dbad59eefbfebbfda68581c2037043cc4c1
+  debian-11.1.0-i386-netinst.iso:
+    media: installer
+    architecture: i386
+    format: iso
+    version: 11.1.0
+    assemble:
+      type: jigdo
+      sources:
+        debian-11.1.0-i386-netinst.jigdo:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/i386/jigdo-cd/debian-11.1.0-i386-netinst.jigdo
+          checksums:
+            sha256: 7400a77401431dad4eeb923fd0a1a3129dfaef558f4f1e93489e2e8a703205a7
+        debian-11.1.0-i386-netinst.template:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/i386/jigdo-cd/debian-11.1.0-i386-netinst.template
+          checksums:
+            sha256: a1a673f8ff36dbd7c6b6cac789f29336ca29c9d1f35ec8bcb13674e97b055821
+    checksums:
+      sha256: c08215e95f510905f132de558291487f4a8cdddde2a73632e93e889b78063f06
+  debian-11.1.0-mips64el-netinst.iso:
+    media: installer
+    architecture: mips64el
+    format: iso
+    version: 11.1.0
+    assemble:
+      type: jigdo
+      sources:
+        debian-11.1.0-mips64el-netinst.jigdo:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/mips64el/jigdo-cd/debian-11.1.0-mips64el-netinst.jigdo
+          checksums:
+            sha256: 44e48bd089f4b02d96c3db10efb547f4882d84a0ac740c2a41ca39d274c94fe0
+        debian-11.1.0-mips64el-netinst.template:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/mips64el/jigdo-cd/debian-11.1.0-mips64el-netinst.template
+          checksums:
+            sha256: b602fae8f968a0b948c747eac2e09a440bd1e834c9319f23bff8c367137a0692
+    checksums:
+      sha256: e526aebc872b0a55c8bddfd143c8c4e01f73b3cf8a7271afcb93429d26fea738
+  debian-11.1.0-mipsel-netinst.iso:
+    media: installer
+    architecture: mipsel
+    format: iso
+    version: 11.1.0
+    assemble:
+      type: jigdo
+      sources:
+        debian-11.1.0-mipsel-netinst.jigdo:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/mipsel/jigdo-cd/debian-11.1.0-mipsel-netinst.jigdo
+          checksums:
+            sha256: 6a6d2c7d2bd43d587b529c4377d03b607db35ec52e89354257e539ac82ddaae2
+        debian-11.1.0-mipsel-netinst.template:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/mipsel/jigdo-cd/debian-11.1.0-mipsel-netinst.template
+          checksums:
+            sha256: a243dcac27e7740f08cec267305e4bdcdea728b4eaae99fabe25abdd10af92d5
+    checksums:
+      sha256: 9a60f2e99fe0060e7523ff63cce2b9f12c5142692f4f023e83c5ef0f2cea93c9
+  debian-11.1.0-amd64-i386-netinst.iso:
+    media: installer
+    architecture: multi-arch
+    format: iso
+    version: 11.1.0
+    assemble:
+      type: jigdo
+      sources:
+        debian-11.1.0-amd64-i386-netinst.jigdo:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/multi-arch/jigdo-cd/debian-11.1.0-amd64-i386-netinst.jigdo
+          checksums:
+            sha256: 01033a9283ac6052467d9b1ac3fd0baedcc0216c953cb0d7d8f7e4134c04c804
+        debian-11.1.0-amd64-i386-netinst.template:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/multi-arch/jigdo-cd/debian-11.1.0-amd64-i386-netinst.template
+          checksums:
+            sha256: c6872f82877e5b86d6b474decbe5f18f9f0be695c96a906db6673d7680a66526
+    checksums:
+      sha256: b4e6815e70a33066d3586cf47a4d2ca547fb57728c257bfad723e44723e099eb
+  debian-11.1.0-ppc64el-netinst.iso:
+    media: installer
+    architecture: ppc64el
+    format: iso
+    version: 11.1.0
+    assemble:
+      type: jigdo
+      sources:
+        debian-11.1.0-ppc64el-netinst.jigdo:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/ppc64el/jigdo-cd/debian-11.1.0-ppc64el-netinst.jigdo
+          checksums:
+            sha256: 98572427df28a9b86d54a77021587b88992435f8aabb78a9811e26ce65dc6160
+        debian-11.1.0-ppc64el-netinst.template:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/ppc64el/jigdo-cd/debian-11.1.0-ppc64el-netinst.template
+          checksums:
+            sha256: 9ab2b835eb06d295b5622102bc2e9ff4573d7e19dc149f1620ed0b626e687c8d
+    checksums:
+      sha256: d5cef0f191b16757865f30e2da6a15da61bf23771ad2f855f20bb7c86a4c8a64
+  debian-11.1.0-s390x-netinst.iso:
+    media: installer
+    architecture: s390x
+    format: iso
+    version: 11.1.0
+    assemble:
+      type: jigdo
+      sources:
+        debian-11.1.0-s390x-netinst.jigdo:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/s390x/jigdo-cd/debian-11.1.0-s390x-netinst.jigdo
+          checksums:
+            sha256: e329ac6a2e8f4cc9601f6914c23f19e908b0958cac5cc037d18cea973dbd023a
+        debian-11.1.0-s390x-netinst.template:
+          urls:
+            - https://cdimage.debian.org/debian-cd/11.1.0/s390x/jigdo-cd/debian-11.1.0-s390x-netinst.template
+          checksums:
+            sha256: f8fe2571423cf198c33f21c889f8efab2aefa60c577e5dab2c8137484d031960
+    checksums:
+      sha256: 47186d5fed084e2aabe5fb39284e907e68ca3310e5d0ed14c15c57a77e07deb7

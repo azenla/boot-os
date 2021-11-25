@@ -60,4 +60,11 @@ class OperatingSystemMetadata {
     final content = yaml.loadYaml(await file.readAsString());
     return OperatingSystemMetadata.decode(content);
   }
+
+  Map<String, dynamic> encode() => <String, dynamic>{
+        "os": os,
+        "version": version,
+        "architectures": architectures,
+        "sources": sources.encode()
+      };
 }

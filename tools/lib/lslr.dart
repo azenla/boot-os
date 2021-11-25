@@ -1,9 +1,10 @@
 library boot.os.tools.lslr;
 
 class LslrIndexUnstructured {
+  final Uri fileBaseUrl;
   final Map<String, List<LslrFileEntry>> entries;
 
-  LslrIndexUnstructured(this.entries);
+  LslrIndexUnstructured(this.fileBaseUrl, this.entries);
 
   @override
   String toString() => "LslrIndexUnstructured(${entries})";
@@ -28,8 +29,9 @@ class LslrIndexUnstructured {
       final parts = path.split("/");
       final parentPath = parts.take(parts.length - 1).join("/");
       final parent = directories[parentPath];
-      final entity = LslrEntity(parts.last);
+      final entity = LslrEntity(fileBaseUrl, parts.last);
       entity.parent = parent;
+      entity.isFile = false;
       directories[path] = entity;
     }
 
@@ -43,7 +45,7 @@ class LslrIndexUnstructured {
         if (directories.containsKey(entryPath)) {
           entity = directories[entryPath]!;
         } else {
-          entity = LslrEntity(entry.name);
+          entity = LslrEntity(fileBaseUrl, entry.name);
           entity.parent = directory;
           entity.fileEntry = entry;
         }
@@ -59,7 +61,8 @@ class LslrIndexUnstructured {
         .value;
   }
 
-  static Future<LslrIndexUnstructured> parse(Stream<String> lines) async {
+  static Future<LslrIndexUnstructured> parse(Stream<String> lines,
+      {Uri? fileBaseUrl}) async {
     final entries = <String, List<LslrFileEntry>>{};
     var currentDirectoryPath = ".";
     var currentLevelEntries = <LslrFileEntry>[];
@@ -86,17 +89,20 @@ class LslrIndexUnstructured {
       }
     }
     finalizeCurrentLevel();
-    return LslrIndexUnstructured(entries);
+    return LslrIndexUnstructured(
+        fileBaseUrl ?? Uri.parse("http://unknown"), entries);
   }
 }
 
 class LslrEntity {
+  final Uri fileBaseUrl;
   final String name;
   LslrEntity? parent;
   List<LslrEntity> children;
   LslrFileEntry? fileEntry;
+  bool isFile = true;
 
-  LslrEntity(this.name) : children = <LslrEntity>[];
+  LslrEntity(this.fileBaseUrl, this.name) : children = <LslrEntity>[];
 
   String get fullPath {
     LslrEntity? current = this;
@@ -125,15 +131,31 @@ class LslrEntity {
     }
   }
 
-  List<LslrEntity> find(Pattern pattern, {bool matchOnFullPath = false}) {
+  List<LslrEntity> find(Pattern pattern,
+      {bool matchOnFullPath = false, bool exact = false}) {
     final entities = <LslrEntity>[];
     visit((entity) {
       final target = matchOnFullPath ? entity.fullPath : entity.name;
-      if (pattern.allMatches(target).isNotEmpty) {
-        entities.add(entity);
+
+      if (exact) {
+        if (target == pattern) {
+          entities.add(entity);
+        }
+      } else {
+        if (pattern.allMatches(target).isNotEmpty) {
+          entities.add(entity);
+        }
       }
     });
     return entities;
+  }
+
+  Uri get url {
+    if (isFile) {
+      return fileBaseUrl.resolve(fullPath);
+    } else {
+      return fileBaseUrl.resolve(fullPath + "/");
+    }
   }
 }
 

@@ -52,6 +52,16 @@ extension DownloadHttpClient on HttpClient {
     await output.close();
     return file;
   }
+
+  Future<String> getUrlContent(Uri url) async {
+    final request = await getUrl(url);
+    final response = await request.close();
+    if (response.statusCode != 200) {
+      throw Exception(
+          "Fetch of ${url} failed. Status Code: ${response.statusCode}");
+    }
+    return await response.transform(utf8.decoder).join();
+  }
 }
 
 class SourceDownload {

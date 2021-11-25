@@ -2,6 +2,7 @@ library boot.os.tools.sources;
 
 import 'dart:io';
 
+import 'package:boot_os_tools/util.dart';
 import 'package:crypto/crypto.dart' as crypto;
 
 class Sources {
@@ -23,6 +24,9 @@ class Sources {
     }
     return Sources(files);
   }
+
+  Map<String, dynamic> encode() =>
+      files.map((key, value) => MapEntry(key, value.encode()));
 }
 
 class SourceFile {
@@ -36,6 +40,12 @@ class SourceFile {
 
   SourceFile(this.media, this.architecture, this.format, this.version,
       this.urls, this.assemble, this.checksums);
+
+  SourceFile.assemble(this.urls, this.assemble, this.checksums)
+      : media = "",
+        architecture = "",
+        format = "",
+        version = "";
 
   factory SourceFile.decode(Map<dynamic, dynamic> content) {
     return SourceFile(
@@ -53,11 +63,7 @@ class SourceFile {
   }
 
   factory SourceFile.decodeAssemble(Map<dynamic, dynamic> content) {
-    return SourceFile(
-        "assemble",
-        "assemble",
-        "assemble",
-        "assemble",
+    return SourceFile.assemble(
         (content["urls"] as List<dynamic>?)?.cast<String>(),
         content.containsKey("assemble")
             ? SourceFileAssemble.decode(
@@ -66,6 +72,16 @@ class SourceFile {
         SourceFileChecksums.decode(
             content["checksums"] as Map<dynamic, dynamic>));
   }
+
+  Map<String, dynamic> encode() => <String, dynamic>{
+        "media": nullIfEmpty(media),
+        "architecture": nullIfEmpty(architecture),
+        "format": nullIfEmpty(format),
+        "version": nullIfEmpty(version),
+        "urls": urls,
+        "assemble": assemble?.encode(),
+        "checksums": checksums.encode()
+      };
 }
 
 class ChecksumWithHash {
@@ -109,6 +125,9 @@ class SourceFileChecksums {
 
     throw Exception("Recognized hash not found.");
   }
+
+  Map<String, String?> encode() =>
+      <String, String?>{"sha256": sha256, "sha512": sha512};
 }
 
 class SourceFileAssemble {
@@ -123,6 +142,9 @@ class SourceFileAssemble {
         Sources.decode(content["sources"] as Map<dynamic, dynamic>,
             useAssembleMode: true));
   }
+
+  Map<String, dynamic> encode() =>
+      <String, dynamic>{"type": type, "sources": sources.encode()};
 }
 
 extension FileChecksumValidate on SourceFileChecksums {
