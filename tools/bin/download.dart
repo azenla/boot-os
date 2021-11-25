@@ -2,8 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:boot_os_tools/jigdo.dart';
 import 'package:boot_os_tools/os.dart';
 import 'package:boot_os_tools/download.dart';
+
+import 'package:path/path.dart' as pathlib;
 
 Future<void> downloadAllSources(
     HttpClient http, List<OperatingSystem> osList) async {
@@ -22,9 +25,13 @@ Future<void> downloadAllSources(
 }
 
 Future<void> main(List<String> argv) async {
-  final ArgParser argp = ArgParser();
+  final argp = ArgParser();
   argp.addOption("max-parallel-downloads",
       abbr: "p", help: "Maximum Parallel Downloads", defaultsTo: "3");
+  argp.addOption("jigdo-cache-path",
+      abbr: "j",
+      help: "Jigdo Cache Path",
+      defaultsTo: "${Directory.current.absolute.path}/jigdo");
   argp.addFlag("help", abbr: "h", help: "Show Command Usage", negatable: false);
 
   Never printUsageAndExit() {
@@ -45,10 +52,15 @@ Future<void> main(List<String> argv) async {
     printUsageAndExit();
   }
   final maxParallelDownloads = int.parse(args["max-parallel-downloads"]);
+  var jigdoCachePath = args["jigdo-cache-path"];
   GlobalDownloadPool.setup(maxParallelDownloads);
 
   final http = HttpClient();
   http.maxConnectionsPerHost = maxParallelDownloads;
+  jigdoCachePath =
+      pathlib.relative(jigdoCachePath, from: Directory.current.path);
+  JigdoCache.globalJigdoCache = JigdoCache(http, Directory(jigdoCachePath));
+
   final osList =
       await Future.wait(args.rest.map((path) => OperatingSystem.load(path)));
   await downloadAllSources(http, osList);

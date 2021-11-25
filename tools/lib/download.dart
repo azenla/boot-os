@@ -79,6 +79,14 @@ class SourceDownload {
       final outputFilePath = "$outputDirectoryPath/$outputFileName";
       final file = File(outputFilePath);
 
+      if (await file.exists()) {
+        if (await metadata.checksums
+            .validatePreferredHash(file, shouldThrowError: false)) {
+          print("[cached] ${outputFilePath}");
+          return;
+        }
+      }
+
       if (assemble.type == "jigdo") {
         final jigdoFileName =
             assemble.sources.files.keys.firstWhere((e) => e.endsWith(".jigdo"));
@@ -94,8 +102,9 @@ class SourceDownload {
         }
         final jigdoMetadata = JigdoMetadataFile.parse(jigdoFileContent);
         final partsToUrls = jigdoMetadata.generatePossibleUrls();
-        final cache =
-            JigdoCache(http, Directory("${outputDirectoryPath}/jigdo"));
+        final cache = JigdoCache.globalJigdoCache != null
+            ? JigdoCache.globalJigdoCache!
+            : JigdoCache(http, Directory("${outputDirectoryPath}/jigdo"));
         final allFilePaths = <String>[];
 
         final tasks = partsToUrls.entries.map((entry) {

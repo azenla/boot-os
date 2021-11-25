@@ -6,7 +6,7 @@ import 'package:args/args.dart';
 import 'package:boot_os_tools/lslr.dart';
 
 Future<void> main(List<String> argv) async {
-  final ArgParser argp = ArgParser();
+  final argp = ArgParser();
   argp.addOption("mirror",
       abbr: "m",
       help: "Mirror URL",

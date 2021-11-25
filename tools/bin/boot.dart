@@ -7,7 +7,7 @@ import 'package:boot_os_tools/os.dart';
 import 'package:boot_os_tools/sources.dart';
 
 Future<void> main(List<String> argv) async {
-  final ArgParser argp = ArgParser(allowTrailingOptions: true);
+  final argp = ArgParser(allowTrailingOptions: true);
   argp.addFlag("help", abbr: "h", help: "Show Command Usage", negatable: false);
   argp.addOption("architecture",
       abbr: "a", help: "Boot Architecture", mandatory: true);

@@ -9,11 +9,11 @@ import 'package:boot_os_tools/sources.dart';
 import 'package:crypto/crypto.dart';
 
 Future<void> main(List<String> argv) async {
-  final ArgParser argp = ArgParser();
+  final argp = ArgParser();
   argp.addOption("max-parallel-downloads",
       abbr: "p", help: "Maximum Parallel Downloads", defaultsTo: "3");
-  argp.addOption("cache",
-      abbr: "c", help: "Cache Directory Path", mandatory: true);
+  argp.addOption("jigdo-cache-path",
+      abbr: "c", help: "Jigdo Cache Directory Path", mandatory: true);
   argp.addOption("image-file",
       abbr: "i", help: "Image File Path", mandatory: true);
   argp.addOption("jigdo-file",
@@ -40,7 +40,7 @@ Future<void> main(List<String> argv) async {
     printUsageAndExit();
   }
 
-  final cacheDirectoryPath = args["cache"];
+  final cacheDirectoryPath = args["jigdo-cache-path"];
   final imageFilePath = args["image-file"];
   final jigdoFilePath = args["jigdo-file"];
   final templateFilePath = args["template-file"];
@@ -52,6 +52,7 @@ Future<void> main(List<String> argv) async {
   final jigdoFile = File(jigdoFilePath);
   final cacheDirectory = Directory(cacheDirectoryPath);
   final cache = JigdoCache(http, cacheDirectory);
+  JigdoCache.globalJigdoCache = cache;
 
   final jigdoFileBytes = await jigdoFile.readAsBytes();
   String jigdoFileContent;

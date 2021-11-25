@@ -49,6 +49,8 @@ Future<void> runJigdoMakeImage(
 }
 
 class JigdoCache {
+  static JigdoCache? globalJigdoCache;
+
   final HttpClient http;
   final Directory directory;
 
