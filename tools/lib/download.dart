@@ -53,14 +53,19 @@ extension DownloadHttpClient on HttpClient {
     return file;
   }
 
-  Future<String> getUrlContent(Uri url) async {
+  Future<String> getUrlString(Uri url) async {
+    final stream = await getUrlStream(url);
+    return await stream.transform(utf8.decoder).join();
+  }
+
+  Future<Stream<List<int>>> getUrlStream(Uri url) async {
     final request = await getUrl(url);
     final response = await request.close();
     if (response.statusCode != 200) {
       throw Exception(
           "Fetch of ${url} failed. Status Code: ${response.statusCode}");
     }
-    return await response.transform(utf8.decoder).join();
+    return response;
   }
 }
 
@@ -144,12 +149,22 @@ class SourceDownload {
   }
 
   Future<void> downloadDirectFile() async {
-    final url = Uri.parse(metadata.urls!.first);
-    await downloadNeededFile(outputFileName, url, metadata.checksums);
+    final urlStrings = metadata.urls!.toList();
+    while (urlStrings.isNotEmpty) {
+      final urlString = urlStrings.removeAt(0);
+      final url = Uri.parse(urlString);
+      final didSucceed = await downloadNeededFile(
+          outputFileName, url, metadata.checksums,
+          failOnNotFound: urlStrings.isEmpty);
+      if (!didSucceed) {
+        print("[next] ${outputFileName}");
+      }
+    }
   }
 
-  Future<void> downloadNeededFile(
-      String fileName, Uri url, SourceFileChecksums checksums) async {
+  Future<bool> downloadNeededFile(
+      String fileName, Uri url, SourceFileChecksums checksums,
+      {bool failOnNotFound = true}) async {
     final outputFilePath = "$outputDirectoryPath/$fileName";
     final file = File(outputFilePath);
     if (await file.exists()) {
@@ -157,15 +172,22 @@ class SourceDownload {
       if (await checksums.validatePreferredHash(file,
           shouldThrowError: false)) {
         print("[cached] ${outputFilePath}");
-        return;
+        return true;
       } else {
         print("[invalid] ${outputFilePath}");
       }
     }
     print("[download] ${outputFilePath}");
-    final downloadedFile =
-        await http.downloadToFile(url, "$outputDirectoryPath/$fileName");
+    final downloadedFile = await http.downloadToFile(
+        url, "$outputDirectoryPath/$fileName",
+        failOnNotFound: failOnNotFound);
+    if (!failOnNotFound) {
+      if (!(await downloadedFile.exists())) {
+        return false;
+      }
+    }
     print("[validate] ${outputFilePath}");
     await checksums.validatePreferredHash(downloadedFile);
+    return true;
   }
 }

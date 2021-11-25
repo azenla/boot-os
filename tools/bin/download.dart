@@ -8,8 +8,8 @@ import 'package:boot_os_tools/download.dart';
 
 import 'package:path/path.dart' as pathlib;
 
-Future<void> downloadAllSources(
-    HttpClient http, List<OperatingSystem> osList) async {
+Future<void> downloadAllSources(HttpClient http, List<OperatingSystem> osList,
+    {String? architecture}) async {
   final tasks = <SourceDownload>[];
   for (final os in osList) {
     for (final name in os.metadata.sources.files.keys) {
@@ -17,6 +17,13 @@ Future<void> downloadAllSources(
       if (sourceFile == null) {
         continue;
       }
+
+      if (architecture != null) {
+        if (sourceFile.architecture != architecture) {
+          continue;
+        }
+      }
+
       tasks.add(
           SourceDownload(http, os.sourcesDirectory.path, name, sourceFile));
     }
@@ -32,6 +39,7 @@ Future<void> main(List<String> argv) async {
       abbr: "j",
       help: "Jigdo Cache Path",
       defaultsTo: "${Directory.current.absolute.path}/jigdo");
+  argp.addOption("architecture", abbr: "a", help: "Limit to Architecture");
   argp.addFlag("help", abbr: "h", help: "Show Command Usage", negatable: false);
 
   Never printUsageAndExit() {
@@ -63,6 +71,7 @@ Future<void> main(List<String> argv) async {
 
   final osList =
       await Future.wait(args.rest.map((path) => OperatingSystem.load(path)));
-  await downloadAllSources(http, osList);
+  await downloadAllSources(http, osList,
+      architecture: args["architecture"]?.toString());
   http.close();
 }
