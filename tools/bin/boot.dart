@@ -12,7 +12,10 @@ Future<void> main(List<String> argv) async {
   argp.addFlag("help", abbr: "h", help: "Show Command Usage", negatable: false);
   argp.addOption("architecture",
       abbr: "a", help: "Boot Architecture", mandatory: true);
-  argp.addOption("qemu-firmware-path", abbr: "q", help: "QEMU Firmware Path");
+  argp.addOption("qemu-firmware-path",
+      abbr: "q",
+      help: "QEMU Firmware Path",
+      defaultsTo: await findQemuFirmwarePath());
   argp.addOption("media", abbr: "m", help: "Boot Media", mandatory: true);
 
   Never printUsageAndExit() {
@@ -108,7 +111,7 @@ Future<void> main(List<String> argv) async {
         "-machine",
         "virt",
         "-cpu",
-        "cortex-a53",
+        "cortex-a57",
         "-device",
         "virtio-gpu-pci",
         "-drive",
