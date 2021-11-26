@@ -28,7 +28,10 @@ class HashList {
       while (parts[0].isEmpty) {
         parts.removeAt(0);
       }
-      final file = parts.join(" ");
+      var file = parts.join(" ");
+      if (file.startsWith("*")) {
+        file = file.substring(1);
+      }
       files[file] = checksum;
     }
     return HashList(hash, files);
