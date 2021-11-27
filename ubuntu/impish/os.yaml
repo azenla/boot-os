@@ -1,14 +1,14 @@
-os: "ubuntu"
-version: "impish"
+os: ubuntu
+version: impish
 architectures:
-  - "amd64"
+  - amd64
 sources:
   ubuntu-21.10-desktop-amd64.iso:
-    media: "live"
-    architecture: "amd64"
-    format: "iso"
+    media: live
+    architecture: amd64
+    format: iso
     version: "21.10"
     urls:
-      - "https://releases.ubuntu.com/21.10/ubuntu-21.10-desktop-amd64.iso"
+      - https://releases.ubuntu.com/21.10/ubuntu-21.10-desktop-amd64.iso
     checksums:
-      sha256: "f8d3ab0faeaecb5d26628ae1aa21c9a13e0a242c381aa08157db8624d574b830"
+      sha256: f8d3ab0faeaecb5d26628ae1aa21c9a13e0a242c381aa08157db8624d574b830

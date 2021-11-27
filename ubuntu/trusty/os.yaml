@@ -1,0 +1,14 @@
+os: ubuntu
+version: trusty
+architectures:
+  - amd64
+sources:
+  ubuntu-14.04.6-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: 14.04.6
+    urls:
+      - https://releases.ubuntu.com/14.04.6/ubuntu-14.04.6-desktop-amd64.iso
+    checksums:
+      sha256: bcc02554c37d438545658be7964e1bc05bdb11289ae16bfbf94626b80d42656f

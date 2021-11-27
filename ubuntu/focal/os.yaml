@@ -1,0 +1,14 @@
+os: ubuntu
+version: focal
+architectures:
+  - amd64
+sources:
+  ubuntu-20.04.3-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: 20.04.3
+    urls:
+      - https://releases.ubuntu.com/20.04.3/ubuntu-20.04.3-desktop-amd64.iso
+    checksums:
+      sha256: 5fdebc435ded46ae99136ca875afc6f05bde217be7dd018e1841924f71db46b5

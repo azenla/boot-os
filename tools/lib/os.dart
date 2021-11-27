@@ -10,8 +10,6 @@ class OperatingSystem {
 
   OperatingSystem(this.path, this.metadata);
 
-  File get sourcesJsonFile => File("$path/sources.json");
-
   File get sourcesYamlFile => File("$path/sources.yaml");
 
   Directory get sourcesDirectory => Directory("$path/sources");

@@ -10,6 +10,7 @@ import 'package:boot_os_tools/lslr.dart';
 import 'package:boot_os_tools/os.dart';
 import 'package:boot_os_tools/sources.dart';
 import 'package:boot_os_tools/util.dart';
+import 'package:boot_os_tools/yaml.dart';
 import 'package:crypto/crypto.dart';
 
 Never printUsageAndExit(ArgParser argp) {
@@ -125,7 +126,7 @@ Future<void> runCdimageTool(ArgResults args) async {
         jigdoFileName,
         [jigdoFile.url.toString()],
         SourceFileChecksums(jigdoFileChecksum, null),
-        templateFileChecksum,
+        templateFileName,
         [templateFile.url.toString()],
         SourceFileChecksums(templateFileChecksum, null),
         SourceFileChecksums(isoFileChecksum, null));
@@ -136,6 +137,6 @@ Future<void> runCdimageTool(ArgResults args) async {
       files.values.map((e) => e.architecture).toSet().toList(), sources);
   final encoded = osMetadata.encode();
   removeAllNullValues(encoded);
-  print(const JsonEncoder.withIndent("  ").convert(encoded));
+  print(YamlWriter.write(encoded));
   http.close();
 }

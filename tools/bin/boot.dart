@@ -14,6 +14,9 @@ Future<void> main(List<String> argv) async {
       abbr: "a", help: "Boot Architecture", mandatory: true);
   argp.addOption("qemu-firmware-path", abbr: "q", help: "QEMU Firmware Path");
   argp.addOption("media", abbr: "m", help: "Boot Media", mandatory: true);
+  argp.addOption("memory",
+      abbr: "M", help: "Memory Size in MB", defaultsTo: "1024");
+  argp.addOption("cpus", abbr: "C", help: "CPU Cores", defaultsTo: "1");
 
   Never printUsageAndExit() {
     print("Usage: tools/bin/boot.dart [options] <os>");
@@ -34,6 +37,8 @@ Future<void> main(List<String> argv) async {
   }
   final architecture = args["architecture"].toString();
   final media = args["media"].toString();
+  final memoryInMb = int.parse(args["memory"].toString());
+  final cpuCores = int.parse(args["cpus"].toString());
   final id = args.rest[0];
   final os = await OperatingSystem.load(id);
   if (!os.metadata.architectures.contains(architecture)) {
@@ -67,7 +72,12 @@ Future<void> main(List<String> argv) async {
   }
 
   final qemuSystemExecutable = qemuArchitectureTable[architecture]!;
-  final qemuSystemArgs = <String>[];
+  final qemuSystemArgs = <String>[
+    "-smp",
+    cpuCores.toString(),
+    "-m",
+    memoryInMb.toString()
+  ];
 
   await os.ensureInstancesDirectory();
   final instanceDirectory = os.instancesDirectory;
@@ -118,6 +128,9 @@ Future<void> main(List<String> argv) async {
         "-drive",
         "if=pflash,format=raw,file=$flashOneImagePath"
       ]);
+      break;
+    case "qemu-system-x86_64":
+      qemuSystemArgs.addAll(<String>["-machine", "q35"]);
       break;
   }
 
