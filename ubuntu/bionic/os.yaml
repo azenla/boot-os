@@ -1,5 +1,5 @@
 os: ubuntu
-version: focal
+version: bionic
 architectures:
   - amd64
 sources:
