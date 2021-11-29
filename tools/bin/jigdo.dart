@@ -4,9 +4,9 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:boot_os_tools/download.dart';
+import 'package:boot_os_tools/fasthash.dart';
 import 'package:boot_os_tools/jigdo.dart';
 import 'package:boot_os_tools/sources.dart';
-import 'package:crypto/crypto.dart';
 
 Future<void> main(List<String> argv) async {
   final argp = ArgParser();

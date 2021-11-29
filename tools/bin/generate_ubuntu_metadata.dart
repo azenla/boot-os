@@ -3,12 +3,12 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:boot_os_tools/download.dart';
+import 'package:boot_os_tools/fasthash.dart';
 import 'package:boot_os_tools/hashlist.dart';
 import 'package:boot_os_tools/os.dart';
 import 'package:boot_os_tools/sources.dart';
 import 'package:boot_os_tools/util.dart';
 import 'package:boot_os_tools/yaml.dart';
-import 'package:crypto/crypto.dart';
 import 'package:yaml/yaml.dart' as yaml;
 
 Never printUsageAndExit(ArgParser argp) {

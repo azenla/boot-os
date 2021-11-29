@@ -1,6 +1,6 @@
 library boot.os.tools.hashlist;
 
-import 'package:crypto/crypto.dart';
+import 'package:boot_os_tools/fasthash.dart';
 
 class HashList {
   final Hash hash;

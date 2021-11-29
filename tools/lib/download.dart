@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:boot_os_tools/sources.dart';
-import 'package:crypto/crypto.dart';
+import 'package:boot_os_tools/fasthash.dart';
 import 'package:pool/pool.dart';
 
 import 'jigdo.dart';

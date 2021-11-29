@@ -3,9 +3,9 @@ library boot.os.tools.sources;
 import 'dart:io';
 
 import 'package:boot_os_tools/globals.dart';
+import 'package:boot_os_tools/fasthash.dart' as fasthash;
 import 'package:boot_os_tools/hashlist.dart';
 import 'package:boot_os_tools/util.dart';
-import 'package:crypto/crypto.dart' as crypto;
 
 class Sources {
   final Map<String, SourceFile> files;
@@ -88,7 +88,7 @@ class SourceFile {
 
 class ChecksumWithHash {
   final String checksum;
-  final crypto.Hash hash;
+  final fasthash.Hash hash;
 
   ChecksumWithHash(this.checksum, this.hash);
 
@@ -98,12 +98,11 @@ class ChecksumWithHash {
       return true;
     }
 
-    final stream = file.openRead();
-    final digest = await hash.bind(stream).single;
-    if (digest.toString() != checksum) {
+    final digest = await hash.hashFile(file);
+    if (digest != checksum) {
       if (shouldThrowError) {
         throw Exception(
-            "${file.path} has checksum ${digest.toString()} but ${checksum} was expected");
+            "${file.path} has checksum ${digest} but ${checksum} was expected");
       }
       return false;
     }
@@ -127,15 +126,15 @@ class SourceFileChecksums {
 
   ChecksumWithHash createPreferredHash() {
     if (sha512 != null) {
-      return ChecksumWithHash(sha512!, crypto.sha512);
+      return ChecksumWithHash(sha512!, fasthash.sha512);
     }
 
     if (sha256 != null) {
-      return ChecksumWithHash(sha256!, crypto.sha256);
+      return ChecksumWithHash(sha256!, fasthash.sha256);
     }
 
     if (md5 != null) {
-      return ChecksumWithHash(md5!, crypto.md5);
+      return ChecksumWithHash(md5!, fasthash.md5);
     }
 
     throw Exception("Recognized hash not found.");
@@ -169,11 +168,11 @@ extension ChecksumWithHashSourceFileChecksums on HashList {
       return null;
     }
 
-    if (hash == crypto.md5) {
+    if (hash == fasthash.md5) {
       return SourceFileChecksums(md5: checksum);
-    } else if (hash == crypto.sha256) {
+    } else if (hash == fasthash.sha256) {
       return SourceFileChecksums(sha256: checksum);
-    } else if (hash == crypto.sha512) {
+    } else if (hash == fasthash.sha512) {
       return SourceFileChecksums(sha512: checksum);
     } else {
       throw Exception("Unknown Hash");

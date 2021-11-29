@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:args/args.dart';
 import 'package:boot_os_tools/download.dart';
+import 'package:boot_os_tools/fasthash.dart';
 import 'package:boot_os_tools/hashlist.dart';
 import 'package:boot_os_tools/jigdo.dart';
 import 'package:boot_os_tools/lslr.dart';
@@ -11,7 +12,6 @@ import 'package:boot_os_tools/os.dart';
 import 'package:boot_os_tools/sources.dart';
 import 'package:boot_os_tools/util.dart';
 import 'package:boot_os_tools/yaml.dart';
-import 'package:crypto/crypto.dart';
 
 Never printUsageAndExit(ArgParser argp) {
   print("Usage: tools/bin/generate_debian_metadata.dart [options]");
