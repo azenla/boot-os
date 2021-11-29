@@ -33,6 +33,8 @@ Future<void> downloadAllSources(HttpClient http, List<OperatingSystem> osList,
 
 Future<void> main(List<String> argv) async {
   final argp = ArgParser();
+  argp.addFlag("all",
+      abbr: "A", help: "Download All Operating Systems", negatable: false);
   argp.addOption("max-parallel-downloads",
       abbr: "p", help: "Maximum Parallel Downloads", defaultsTo: "3");
   argp.addOption("jigdo-cache-path",
@@ -59,8 +61,9 @@ Future<void> main(List<String> argv) async {
   if (args["help"]) {
     printUsageAndExit();
   }
-  final maxParallelDownloads = int.parse(args["max-parallel-downloads"]);
-  var jigdoCachePath = args["jigdo-cache-path"];
+  final maxParallelDownloads =
+      int.parse(args["max-parallel-downloads"].toString());
+  var jigdoCachePath = args["jigdo-cache-path"].toString();
   GlobalDownloadPool.setup(maxParallelDownloads);
 
   final http = HttpClient();
@@ -69,8 +72,16 @@ Future<void> main(List<String> argv) async {
       pathlib.relative(jigdoCachePath, from: Directory.current.path);
   JigdoCache.globalJigdoCache = JigdoCache(http, Directory(jigdoCachePath));
 
-  final osList =
-      await Future.wait(args.rest.map((path) => OperatingSystem.load(path)));
+  final List<OperatingSystem> osList;
+  if (args["all"]) {
+    final pathsToScan = args.rest.isEmpty ? <String>[""] : args.rest;
+    osList = await Stream.fromIterable(pathsToScan)
+        .asyncExpand((path) => OperatingSystem.loadAllIn(path))
+        .toList();
+  } else {
+    osList =
+        await Future.wait(args.rest.map((path) => OperatingSystem.load(path)));
+  }
   await downloadAllSources(http, osList,
       architecture: args["architecture"]?.toString());
   http.close();

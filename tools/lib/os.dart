@@ -2,6 +2,7 @@ library boot.os.tools.os;
 
 import 'dart:io';
 import 'package:boot_os_tools/sources.dart';
+import 'package:path/path.dart' as pathlib;
 import 'package:yaml/yaml.dart' as yaml;
 
 class OperatingSystem {
@@ -32,6 +33,25 @@ class OperatingSystem {
     final osMetadataPath = "${path}/os.yaml";
     final metadata = await OperatingSystemMetadata.loadFromFile(osMetadataPath);
     return OperatingSystem(path, metadata);
+  }
+
+  static Stream<OperatingSystem> loadAllIn(String path) async* {
+    final directory = Directory(path);
+    await for (final entity in directory.list(recursive: true)) {
+      if (entity is! File) {
+        continue;
+      }
+
+      if (pathlib.basename(entity.path) != "os.yaml") {
+        continue;
+      }
+
+      var pathOfDirectory = entity.parent.path;
+      if (pathOfDirectory.startsWith("./")) {
+        pathOfDirectory = pathOfDirectory.substring(2);
+      }
+      yield await load(pathOfDirectory);
+    }
   }
 }
 
