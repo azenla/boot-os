@@ -1,0 +1,14 @@
+os: ubuntu
+version: eoan
+architectures:
+  - amd64
+sources:
+  ubuntu-19.10-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "19.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/19.10/ubuntu-19.10-desktop-amd64.iso
+    checksums:
+      sha256: 96a8095001d447bbb9078925d72f7a77a3f62fbd78460093759af4394ce83d79

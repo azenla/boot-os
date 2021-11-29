@@ -1,0 +1,14 @@
+os: ubuntu
+version: oneiric
+architectures:
+  - amd64
+sources:
+  ubuntu-11.10-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "11.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/11.10/ubuntu-11.10-desktop-amd64.iso
+    checksums:
+      sha256: 462a1311378437b64dc507de7da6cab88528939dccee91940f94ce3e57c1cfab

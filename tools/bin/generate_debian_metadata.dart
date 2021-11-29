@@ -112,9 +112,11 @@ Future<void> runCdimageTool(ArgResults args) async {
     final templateFileName = "$baseFileName.template";
     final templateFile = jigdoFile.parent!.find(templateFileName).single;
 
-    final jigdoFileChecksum = hashList.files[jigdoFileName]!;
-    final isoFileChecksum = hashList.files[isoFileName]!;
-    final templateFileChecksum = hashList.files[templateFileName]!;
+    final jigdoFileChecksum =
+        hashList.createSourceFileChecksums(jigdoFileName)!;
+    final isoFileChecksum = hashList.createSourceFileChecksums(isoFileName)!;
+    final templateFileChecksum =
+        hashList.createSourceFileChecksums(templateFileName)!;
 
     final architecture = jigdoFile.parent!.parent!.name;
     final version = jigdoFile.name.split("-")[1];
@@ -125,11 +127,11 @@ Future<void> runCdimageTool(ArgResults args) async {
         version,
         jigdoFileName,
         [jigdoFile.url.toString()],
-        SourceFileChecksums(jigdoFileChecksum, null),
+        jigdoFileChecksum,
         templateFileName,
         [templateFile.url.toString()],
-        SourceFileChecksums(templateFileChecksum, null),
-        SourceFileChecksums(isoFileChecksum, null));
+        templateFileChecksum,
+        isoFileChecksum);
   }
   final debianVersionName = args["debian-version"];
   final sources = Sources(files);

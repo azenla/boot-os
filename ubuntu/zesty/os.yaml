@@ -1,0 +1,14 @@
+os: ubuntu
+version: zesty
+architectures:
+  - amd64
+sources:
+  ubuntu-17.04-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "17.04"
+    urls:
+      - https://old-releases.ubuntu.com/releases/17.04/ubuntu-17.04-desktop-amd64.iso
+    checksums:
+      sha256: b718c7fb1066589af52f4ba191775b0fb514c5fb6fa7d91367043e1db06d8a0b

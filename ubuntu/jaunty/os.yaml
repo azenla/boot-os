@@ -1,0 +1,14 @@
+os: ubuntu
+version: jaunty
+architectures:
+  - amd64
+sources:
+  ubuntu-9.04-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "9.04"
+    urls:
+      - https://old-releases.ubuntu.com/releases/9.04/ubuntu-9.04-desktop-amd64.iso
+    checksums:
+      md5: cace6ea9dde8dc158174e345aabe3fae

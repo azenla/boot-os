@@ -1,0 +1,14 @@
+os: ubuntu
+version: raring
+architectures:
+  - amd64
+sources:
+  ubuntu-13.04-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "13.04"
+    urls:
+      - https://old-releases.ubuntu.com/releases/13.04/ubuntu-13.04-desktop-amd64.iso
+    checksums:
+      sha256: b4b20e0293c2305e83a60c605d39cabf43115794d574c68f1492d49fee0ab3d8

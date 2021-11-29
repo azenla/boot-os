@@ -1,0 +1,14 @@
+os: ubuntu
+version: lucid
+architectures:
+  - amd64
+sources:
+  ubuntu-10.04-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: 10.04.4
+    urls:
+      - https://old-releases.ubuntu.com/releases/10.04.4/ubuntu-10.04-desktop-amd64.iso
+    checksums:
+      sha256: dc40522fe5e70b2fed5737d1beb29da87b0072cc275e086ebed30cb83ecf1dd8

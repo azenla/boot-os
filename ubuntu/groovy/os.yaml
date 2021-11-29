@@ -1,0 +1,14 @@
+os: ubuntu
+version: groovy
+architectures:
+  - amd64
+sources:
+  ubuntu-20.10-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "20.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/20.10/ubuntu-20.10-desktop-amd64.iso
+    checksums:
+      sha256: 3ef833828009fb69d5c584f3701d6946f89fa304757b7947e792f9491caa270e

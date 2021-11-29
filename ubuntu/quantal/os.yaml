@@ -1,0 +1,14 @@
+os: ubuntu
+version: quantal
+architectures:
+  - amd64
+sources:
+  ubuntu-12.10-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "12.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/12.10/ubuntu-12.10-desktop-amd64.iso
+    checksums:
+      sha256: 256a2cc652ec86ff366907fd7b878e577b631cc6c6533368c615913296069d80

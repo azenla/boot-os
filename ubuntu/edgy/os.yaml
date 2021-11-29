@@ -1,0 +1,14 @@
+os: ubuntu
+version: edgy
+architectures:
+  - amd64
+sources:
+  ubuntu-6.10-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "6.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/6.10/ubuntu-6.10-desktop-amd64.iso
+    checksums:
+      md5: 99c3a849f6e9a0d143f057433c7f4d84

@@ -1,0 +1,14 @@
+os: ubuntu
+version: gutsy
+architectures:
+  - amd64
+sources:
+  ubuntu-7.10-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "7.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/7.10/ubuntu-7.10-desktop-amd64.iso
+    checksums:
+      md5: 61c87943a92bc7bf519da4e2555d6e86

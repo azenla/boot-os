@@ -9,6 +9,7 @@ sources:
     format: iso
     version: 16.04.7
     urls:
-      - https://releases.ubuntu.com/16.04.7/ubuntu-16.04.7-desktop-amd64.iso
+      - https://releases.ubuntu.com/releases/16.04.7/ubuntu-16.04.7-desktop-amd64.iso
+      - https://old-releases.ubuntu.com/releases/16.04.7/ubuntu-16.04.7-desktop-amd64.iso
     checksums:
       sha256: 8ba7e2687fb8a2152504475e92e489aace543059fd4ba7ffe10111c42394853b

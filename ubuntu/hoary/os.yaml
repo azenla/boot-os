@@ -1,0 +1,14 @@
+os: ubuntu
+version: hoary
+architectures:
+  - amd64
+sources:
+  ubuntu-5.04-live-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "5.04"
+    urls:
+      - https://old-releases.ubuntu.com/releases/5.04/ubuntu-5.04-live-amd64.iso
+    checksums:
+      md5: 664e3d7864c0f4f2d2efc09ec230fb2e

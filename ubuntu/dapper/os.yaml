@@ -1,0 +1,14 @@
+os: ubuntu
+version: dapper
+architectures:
+  - amd64
+sources:
+  ubuntu-6.06.1-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: 6.06.2
+    urls:
+      - https://old-releases.ubuntu.com/releases/6.06.2/ubuntu-6.06.1-desktop-amd64.iso
+    checksums:
+      sha256: 21936dc03595f13c20326b75ec1246276cdd5f731abc227065ed6543e31bc660

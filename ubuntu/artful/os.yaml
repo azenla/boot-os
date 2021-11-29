@@ -1,0 +1,14 @@
+os: ubuntu
+version: artful
+architectures:
+  - amd64
+sources:
+  ubuntu-17.10-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "17.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/17.10/ubuntu-17.10-desktop-amd64.iso
+    checksums:
+      sha256: 1a3d2d32ada795e5df47293745a7479bcb3e4e29d8ee1eaa114350b691cf38d3

@@ -1,0 +1,14 @@
+os: ubuntu
+version: maverick
+architectures:
+  - amd64
+sources:
+  ubuntu-10.10-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "10.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/10.10/ubuntu-10.10-desktop-amd64.iso
+    checksums:
+      sha256: 3d720b4044c3f8baf14f706b09f012df82f269291b9f0ba0b3fc88e2bf07d0bd

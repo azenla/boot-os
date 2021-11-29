@@ -1,0 +1,14 @@
+os: ubuntu
+version: wily
+architectures:
+  - amd64
+sources:
+  ubuntu-15.10-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "15.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/15.10/ubuntu-15.10-desktop-amd64.iso
+    checksums:
+      sha256: cc991993e3d9f57f27199877ac416157228fe6896212968d6e8c5aebd74e7ab0

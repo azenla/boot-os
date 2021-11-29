@@ -1,0 +1,14 @@
+os: ubuntu
+version: natty
+architectures:
+  - amd64
+sources:
+  ubuntu-11.04-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "11.04"
+    urls:
+      - https://old-releases.ubuntu.com/releases/11.04/ubuntu-11.04-desktop-amd64.iso
+    checksums:
+      sha256: e4ba7267d7a301ff2fb52fb7b4f143cc404ea56a0f2ce2cc63bdaaa4102381ad

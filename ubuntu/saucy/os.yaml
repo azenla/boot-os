@@ -1,0 +1,14 @@
+os: ubuntu
+version: saucy
+architectures:
+  - amd64
+sources:
+  ubuntu-13.10-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "13.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/13.10/ubuntu-13.10-desktop-amd64.iso
+    checksums:
+      sha256: 369a1f604df30e097f063829b27c39941a26e5771c53b35aa9ea0e0e0abb3a56

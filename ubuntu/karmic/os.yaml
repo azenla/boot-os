@@ -1,0 +1,14 @@
+os: ubuntu
+version: karmic
+architectures:
+  - amd64
+sources:
+  ubuntu-9.10-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "9.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/9.10/ubuntu-9.10-desktop-amd64.iso
+    checksums:
+      sha256: a3f9c534e005729fbed3856239b1ec3341fef8d0d20c1d92aab2bcf844985eee

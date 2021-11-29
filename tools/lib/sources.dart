@@ -2,6 +2,8 @@ library boot.os.tools.sources;
 
 import 'dart:io';
 
+import 'package:boot_os_tools/globals.dart';
+import 'package:boot_os_tools/hashlist.dart';
 import 'package:boot_os_tools/util.dart';
 import 'package:crypto/crypto.dart' as crypto;
 
@@ -91,6 +93,11 @@ class ChecksumWithHash {
   ChecksumWithHash(this.checksum, this.hash);
 
   Future<bool> validate(File file, {bool shouldThrowError = true}) async {
+    if (GlobalSettings.shortCircuitFileValidation) {
+      print("[validation-skip] ${file.path}");
+      return true;
+    }
+
     final stream = file.openRead();
     final digest = await hash.bind(stream).single;
     if (digest.toString() != checksum) {
@@ -105,13 +112,17 @@ class ChecksumWithHash {
 }
 
 class SourceFileChecksums {
+  final String? md5;
   final String? sha256;
   final String? sha512;
 
-  SourceFileChecksums(this.sha256, this.sha512);
+  SourceFileChecksums({this.md5, this.sha256, this.sha512});
 
   factory SourceFileChecksums.decode(Map<dynamic, dynamic> content) {
-    return SourceFileChecksums(content["sha256"], content["sha512"]);
+    return SourceFileChecksums(
+        md5: content["md5"],
+        sha256: content["sha256"],
+        sha512: content["sha512"]);
   }
 
   ChecksumWithHash createPreferredHash() {
@@ -123,11 +134,15 @@ class SourceFileChecksums {
       return ChecksumWithHash(sha256!, crypto.sha256);
     }
 
+    if (md5 != null) {
+      return ChecksumWithHash(md5!, crypto.md5);
+    }
+
     throw Exception("Recognized hash not found.");
   }
 
   Map<String, String?> encode() =>
-      <String, String?>{"sha256": sha256, "sha512": sha512};
+      <String, String?>{"md5": md5, "sha256": sha256, "sha512": sha512};
 }
 
 class SourceFileAssemble {
@@ -145,6 +160,25 @@ class SourceFileAssemble {
 
   Map<String, dynamic> encode() =>
       <String, dynamic>{"type": type, "sources": sources.encode()};
+}
+
+extension ChecksumWithHashSourceFileChecksums on HashList {
+  SourceFileChecksums? createSourceFileChecksums(String file) {
+    final checksum = files[file];
+    if (checksum == null) {
+      return null;
+    }
+
+    if (hash == crypto.md5) {
+      return SourceFileChecksums(md5: checksum);
+    } else if (hash == crypto.sha256) {
+      return SourceFileChecksums(sha256: checksum);
+    } else if (hash == crypto.sha512) {
+      return SourceFileChecksums(sha512: checksum);
+    } else {
+      throw Exception("Unknown Hash");
+    }
+  }
 }
 
 extension FileChecksumValidate on SourceFileChecksums {

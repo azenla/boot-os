@@ -1,0 +1,14 @@
+os: ubuntu
+version: utopic
+architectures:
+  - amd64
+sources:
+  ubuntu-14.10-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "14.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/14.10/ubuntu-14.10-desktop-amd64.iso
+    checksums:
+      sha256: c753dbdf665a77e466f07b8f040af00111d609352484a5a915df82e66dd0d163

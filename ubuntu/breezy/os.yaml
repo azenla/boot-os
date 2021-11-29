@@ -1,0 +1,14 @@
+os: ubuntu
+version: breezy
+architectures:
+  - amd64
+sources:
+  ubuntu-5.10-live-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "5.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/5.10/ubuntu-5.10-live-amd64.iso
+    checksums:
+      md5: 8523ee4b5490c9b77ac4ec5e5a12b2f5

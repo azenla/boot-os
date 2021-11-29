@@ -1,0 +1,14 @@
+os: ubuntu
+version: intrepid
+architectures:
+  - amd64
+sources:
+  ubuntu-8.10-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "8.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/8.10/ubuntu-8.10-desktop-amd64.iso
+    checksums:
+      md5: f9cdb7e9ad85263dde17f8fc81a6305b

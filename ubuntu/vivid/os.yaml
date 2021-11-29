@@ -1,0 +1,14 @@
+os: ubuntu
+version: vivid
+architectures:
+  - amd64
+sources:
+  ubuntu-15.04-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "15.04"
+    urls:
+      - https://old-releases.ubuntu.com/releases/15.04/ubuntu-15.04-desktop-amd64.iso
+    checksums:
+      sha256: a3cfac5c32b217db2cab43f261dcbe2cc546d99ca23e113312fedb78733aef6b

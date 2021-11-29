@@ -58,12 +58,28 @@ extension DownloadHttpClient on HttpClient {
     return await stream.transform(utf8.decoder).join();
   }
 
+  Future<String?> getUrlStringMaybe(Uri url) async {
+    final stream = await getUrlStreamMaybe(url);
+    return await stream?.transform(utf8.decoder).join();
+  }
+
   Future<Stream<List<int>>> getUrlStream(Uri url) async {
     final request = await getUrl(url);
     final response = await request.close();
     if (response.statusCode != 200) {
+      response.listen((bytes) {});
       throw Exception(
           "Fetch of ${url} failed. Status Code: ${response.statusCode}");
+    }
+    return response;
+  }
+
+  Future<Stream<List<int>>?> getUrlStreamMaybe(Uri url) async {
+    final request = await getUrl(url);
+    final response = await request.close();
+    if (response.statusCode != 200) {
+      response.listen((bytes) {});
+      return null;
     }
     return response;
   }

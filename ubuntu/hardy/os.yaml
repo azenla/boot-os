@@ -1,0 +1,14 @@
+os: ubuntu
+version: hardy
+architectures:
+  - amd64
+sources:
+  ubuntu-8.04-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: 8.04.4
+    urls:
+      - https://old-releases.ubuntu.com/releases/8.04.4/ubuntu-8.04-desktop-amd64.iso
+    checksums:
+      sha256: 7380a925b1bad6628da2ece862b7a527343d263d3654e589718a0c07e50fba34

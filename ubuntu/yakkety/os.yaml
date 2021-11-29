@@ -1,0 +1,14 @@
+os: ubuntu
+version: yakkety
+architectures:
+  - amd64
+sources:
+  ubuntu-16.10-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "16.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/16.10/ubuntu-16.10-desktop-amd64.iso
+    checksums:
+      sha256: 4405c37d61b5cac6c89eaf379c035058ed7db8594abd209337276c7c4556787e

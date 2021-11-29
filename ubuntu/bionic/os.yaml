@@ -9,6 +9,7 @@ sources:
     format: iso
     version: 18.04.6
     urls:
-      - https://releases.ubuntu.com/18.04.6/ubuntu-18.04.6-desktop-amd64.iso
+      - https://releases.ubuntu.com/releases/18.04.6/ubuntu-18.04.6-desktop-amd64.iso
+      - https://old-releases.ubuntu.com/releases/18.04.6/ubuntu-18.04.6-desktop-amd64.iso
     checksums:
       sha256: f730be589aa1ba923ebe6eca573fa66d09ba14c4c104da2c329df652d42aff11

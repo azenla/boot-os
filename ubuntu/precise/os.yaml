@@ -1,0 +1,14 @@
+os: ubuntu
+version: precise
+architectures:
+  - amd64
+sources:
+  ubuntu-12.04-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: 12.04.5
+    urls:
+      - https://old-releases.ubuntu.com/releases/12.04.5/ubuntu-12.04-desktop-amd64.iso
+    checksums:
+      sha256: eca367bb12f7bf197cfb2ab4835ac073b9ed902a8c37c075c28dd6b9f0e4bb55

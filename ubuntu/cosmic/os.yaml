@@ -1,0 +1,14 @@
+os: ubuntu
+version: cosmic
+architectures:
+  - amd64
+sources:
+  ubuntu-18.10-desktop-amd64.iso:
+    media: live
+    architecture: amd64
+    format: iso
+    version: "18.10"
+    urls:
+      - https://old-releases.ubuntu.com/releases/18.10/ubuntu-18.10-desktop-amd64.iso
+    checksums:
+      sha256: 818affdaea8d38bbbe620009bfa788a7cbc583c7c61c2d278f61dd3c43e030a0
