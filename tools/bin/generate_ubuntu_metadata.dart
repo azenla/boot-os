@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/args.dart';
@@ -16,10 +15,8 @@ Never printUsageAndExit(ArgParser argp) {
   print("Usage: tools/bin/generate_ubuntu_metadata.dart [options]");
   print("");
   print(argp.usage);
-  if (argp.commands.isNotEmpty) {
-    print("");
-  }
   for (final commandName in argp.commands.keys) {
+    print("");
     print("Command: ${commandName}");
     print("");
     print(argp.commands[commandName]!.usage);
